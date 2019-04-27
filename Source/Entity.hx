@@ -21,8 +21,8 @@ class Entity extends Sprite implements Collidable
   public static inline var FRICTION:Float = 0.6;
 
   private var velocity:Point;
+  private var targetVelocity:Point;
   private var facing:Point;
-  private var speed:Float;
   private var target:Point;
   private var path:Array<Point>;
 
@@ -37,13 +37,14 @@ class Entity extends Sprite implements Collidable
     #end
 
     velocity = new Point();
+    targetVelocity = new Point();
     facing = new Point(0, 1);
-    speed = 5;
   }
 
   public function update(delta:Int):Void
   {
     var radius = Reflect.field(Type.getClass(this), "RADIUS");
+    var speed = Reflect.field(Type.getClass(this), "SPEED");
 
     if (x - radius < 0) x = radius;
     else if (x + radius > Lib.current.stage.stageWidth) x = Lib.current.stage.stageWidth - radius;
@@ -55,35 +56,42 @@ class Entity extends Sprite implements Collidable
       var dx = target.x - x;
       var dy = target.y - y;
       var dist = Math.sqrt(dx*dx + dy*dy);
-      velocity = new Point(dx, dy);
-      velocity.normalize(1);
-
-      var s = speed;
 
       if (dist <= speed)
-        s = dist * 0.8;
-
-      x += velocity.x * s;
-      y += velocity.y * s;
-
-      if (dist <= radius)
+      {
+        targetVelocity.setTo(0, 0);
         target = null;
+      }
+      else
+      {
+        targetVelocity.setTo(dx, dy);
+        targetVelocity.normalize(Math.min(dist, speed));
+      }
     }
     else
     {
-      velocity.x *= FRICTION;
-      velocity.y *= FRICTION;
-
-      if (velocity.length < 0.05)
-        velocity.setTo(0, 0);
-
       if (path != null && path.length > 0)
         target = path.pop();
       else
         path = null;
     }
 
-    if (velocity.length > 0)
+    var dvx = targetVelocity.x - velocity.x;
+    var dvy = targetVelocity.y - velocity.y;
+    var len = Point.distance(velocity, targetVelocity);
+
+    if (len > 0.01)
+    {
+      velocity.x += dvx * 0.2;
+      velocity.y += dvy * 0.2;
+    }
+    else
+      velocity.copyFrom(targetVelocity);
+
+    x += velocity.x;
+    y += velocity.y;
+
+    if (velocity.length > 0.05)
     {
       facing = velocity.clone();
       facing.normalize(1);
@@ -92,6 +100,7 @@ class Entity extends Sprite implements Collidable
 
   public function setPath(path:Array<Point>):Void
   {
+    target = null;
     this.path = path;
   }
 

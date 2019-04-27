@@ -17,6 +17,7 @@ class Player extends Entity
 {
   public static inline var FRAME_RATE:Int = 12;
   public static inline var RADIUS:Int = 30;
+  public static inline var SPEED:Int = 5;
   public static inline var SPRITE_WIDTH:Int = 50;
   public static inline var SPRITE_HEIGHT:Int = 50;
 

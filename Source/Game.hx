@@ -72,16 +72,16 @@ class Game extends Sprite
 
     {
       leftHand = new Hand(true);
-      leftHand.x = 500;
-      leftHand.y = 100;
+      leftHand.x = player.x;
+      leftHand.y = player.y;
       container.addChild(leftHand);
       entities.push(leftHand);
     }
 
     {
       rightHand = new Hand();
-      rightHand.x = 500;
-      rightHand.y = 100;
+      rightHand.x = player.x;
+      rightHand.y = player.y;
       container.addChild(rightHand);
       entities.push(rightHand);
     }

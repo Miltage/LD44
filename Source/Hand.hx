@@ -17,6 +17,7 @@ class Hand extends Entity
 {
   public static inline var FRAME_RATE:Int = 12;
   public static inline var RADIUS:Int = 8;
+  public static inline var SPEED:Int = 8;
   public static inline var SPRITE_WIDTH:Int = 16;
   public static inline var SPRITE_HEIGHT:Int = 16;
 
@@ -28,7 +29,6 @@ class Hand extends Entity
     super();
 
     inverted = flip;
-    speed = 8;
 
     {
       var bitmapData:BitmapData = Assets.getBitmapData("assets/hand.png");
