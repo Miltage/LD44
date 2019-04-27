@@ -13,8 +13,10 @@ import openfl.Assets;
 class Main extends Sprite
 {
   public static inline var SCALE:Float = 2;
+  public static inline var BG_COLOR:UInt = 0x342f38;
 
-  private var game:Game;
+  private static var game:Game;
+
   private var input:InputController;
   
   public function new()
@@ -27,8 +29,9 @@ class Main extends Sprite
     var sh = Lib.current.stage.stageHeight;
 
     game = new Game(input);
-    game.graphics.beginFill(0xDEFEC8, 1);
+    game.graphics.beginFill(BG_COLOR, 1);
     game.graphics.drawRect(0, 0, sw, sh);
+    game.init();
     addChild(game);
 
     var stage = Lib.current.stage;
@@ -61,12 +64,18 @@ class Main extends Sprite
   private function onClick(e:MouseEvent):Void
   {
     game.onClick(mouseX, mouseY);
+    //trace(mouseX, mouseY);
   }
 
   private function onEnterFrame(e:Event):Void
   {
     game.update();
     input.update();
+  }
+
+  public static function getGameInstance():Game
+  {
+    return game;
   }
   
   

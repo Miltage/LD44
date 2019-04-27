@@ -24,6 +24,7 @@ class Entity extends Sprite implements Collidable
   private var facing:Point;
   private var speed:Float;
   private var target:Point;
+  private var path:Array<Point>;
 
   public function new()
   {
@@ -72,8 +73,14 @@ class Entity extends Sprite implements Collidable
     {
       velocity.x *= FRICTION;
       velocity.y *= FRICTION;
+
       if (velocity.length < 0.05)
         velocity.setTo(0, 0);
+
+      if (path != null && path.length > 0)
+        target = path.pop();
+      else
+        path = null;
     }
 
     if (velocity.length > 0)
@@ -81,6 +88,11 @@ class Entity extends Sprite implements Collidable
       facing = velocity.clone();
       facing.normalize(1);
     }
+  }
+
+  public function setPath(path:Array<Point>):Void
+  {
+    this.path = path;
   }
 
   public function setTarget(tx:Float, ty:Float)
