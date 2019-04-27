@@ -42,7 +42,7 @@ class NavMesh
 
     for (node in nodes)
     {
-      if (los(new Point(np.x, np.y), new Point(node.x, node.y), 10))
+      if (los(new Point(np.x, np.y), new Point(node.x, node.y)))
       {
         node.neighbours.push(np);
         np.neighbours.push(node);
@@ -56,7 +56,7 @@ class NavMesh
   {
     var result = new Array<Point>();
 
-    if(los(p0, p1, 4))
+    if(los(p0, p1))
     {
       result.push(p1);
       return result;
@@ -110,6 +110,26 @@ class NavMesh
     for (node in nodes)
       node.parent = null;
 
+    trace(result);
+
+    var last = 0;
+    var first = result.length - 1;
+    for (i in 0...result.length)
+    {
+      if (los(p1, new Point(result[i].x, result[i].y)))
+        last = i;
+
+      if (los(p0, new Point(result[i].x, result[i].y)))
+      {
+        first = i + 1;
+        break;
+      }
+    }
+    result.splice(1, last - 1);
+    result.splice(first, result.length - first);
+
+    trace(result);
+
     return result;
   }
 
@@ -140,7 +160,7 @@ class NavMesh
     var result = getNodesByDistance(p);
     for (node in result)
     {
-      if (los(p, new Point(node.x, node.y), 1))
+      if (los(p, new Point(node.x, node.y)))
         return node;
     }
     return null;
@@ -177,7 +197,7 @@ class NavMesh
     return result;
   }
 
-  public function los(p0:Point, p1:Point, size:Int = 1):Bool
+  public function los(p0:Point, p1:Point, size:Int = 6):Bool
   {
     if(Point.distance(p0, p1) < size) return true;
 

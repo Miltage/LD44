@@ -90,8 +90,8 @@ class Game extends Sprite
 
     {
       player = new Player();
-      player.x = 200;
-      player.y = 100;
+      player.x = 400;
+      player.y = 400;
       container.addChild(player);
       entities.push(player);
     }
