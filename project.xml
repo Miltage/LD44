@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="Nest" package="com.sample.nest" version="1.0.0" company="Company Name" />
-	<app main="Main" path="Export" file="Nest" />
+	<meta title="Coin" package="com.sample.nest" version="1.0.0" company="Robert Shenton" />
+	<app main="Main" path="Export" file="Coin" />
 
 	<window width="1280" height="720"/>
 	

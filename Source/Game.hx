@@ -9,8 +9,8 @@ import Player;
 
 class Game extends Sprite
 {
-  private var playerMap:Map<PlayerTeam, Player>;
   private var input:InputController;
+  private var player:Player;
   private var entities:Array<Entity>;
 
   private var container:Sprite;
@@ -36,7 +36,6 @@ class Game extends Sprite
 
   private function init():Void
   {
-    playerMap = new Map<PlayerTeam, Player>();
     entities = new Array<Entity>();
 
     container = new Sprite();
@@ -46,19 +45,9 @@ class Game extends Sprite
     var sh = Lib.current.stage.stageHeight;
 
     {
-      var player = new Player();
-      playerMap.set(RED, player);
+      player = new Player();
       player.x = 200;
       player.y = 100;
-      container.addChild(player);
-      entities.push(player);
-    }
-
-    {
-      var player = new Player();
-      player.x = 850;
-      player.y = 150;
-      playerMap.set(BLUE, player);
       container.addChild(player);
       entities.push(player);
     }
@@ -88,45 +77,23 @@ class Game extends Sprite
 
     // player movement
     if (input.isKeyDown('W'.code) && input.isKeyDown('A'.code))
-      getPlayer(RED).move(UP_LEFT);
+      player.move(UP_LEFT);
     else if (input.isKeyDown('W'.code) && input.isKeyDown('D'.code))
-      getPlayer(RED).move(UP_RIGHT);
+      player.move(UP_RIGHT);
     else if (input.isKeyDown('S'.code) && input.isKeyDown('A'.code))
-      getPlayer(RED).move(DOWN_LEFT);
+      player.move(DOWN_LEFT);
     else if (input.isKeyDown('S'.code) && input.isKeyDown('D'.code))
-      getPlayer(RED).move(DOWN_RIGHT);
+      player.move(DOWN_RIGHT);
     else if (input.isKeyDown('D'.code))
-      getPlayer(RED).move(RIGHT);
+      player.move(RIGHT);
     else if (input.isKeyDown('A'.code))
-      getPlayer(RED).move(LEFT);
+      player.move(LEFT);
     else if (input.isKeyDown('W'.code))
-      getPlayer(RED).move(UP);
+      player.move(UP);
     else if (input.isKeyDown('S'.code))
-      getPlayer(RED).move(DOWN);
-
-    if (input.isKeyDown(38) && input.isKeyDown(37))
-      getPlayer(BLUE).move(UP_LEFT);
-    else if (input.isKeyDown(38) && input.isKeyDown(39))
-      getPlayer(BLUE).move(UP_RIGHT);
-    else if (input.isKeyDown(40) && input.isKeyDown(37))
-      getPlayer(BLUE).move(DOWN_LEFT);
-    else if (input.isKeyDown(40) && input.isKeyDown(39))
-      getPlayer(BLUE).move(DOWN_RIGHT);
-    else if (input.isKeyDown(39))
-      getPlayer(BLUE).move(RIGHT);
-    else if (input.isKeyDown(37))
-      getPlayer(BLUE).move(LEFT);
-    else if (input.isKeyDown(38))
-      getPlayer(BLUE).move(UP);
-    else if (input.isKeyDown(40))
-      getPlayer(BLUE).move(DOWN);
+      player.move(DOWN);
 
     for (entity in entities)
       entity.update(delta);
-  }
-
-  public function getPlayer(team:PlayerTeam):Player
-  {
-    return playerMap.get(team);
   }
 }

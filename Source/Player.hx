@@ -13,18 +13,12 @@ import spritesheet.importers.BitmapImporter;
 
 import Entity;
 
-enum PlayerTeam
-{
-  RED;
-  BLUE;
-}
-
 class Player extends Entity
 {
   public static inline var FRAME_RATE:Int = 12;
   public static inline var RADIUS:Int = 30;
-  public static inline var SPRITE_WIDTH:Int = 100;
-  public static inline var SPRITE_HEIGHT:Int = 100;
+  public static inline var SPRITE_WIDTH:Int = 50;
+  public static inline var SPRITE_HEIGHT:Int = 50;
 
   private var animation:AnimatedSprite;
   private var lastMove:MoveDirection;
@@ -38,25 +32,20 @@ class Player extends Entity
     graphics.drawCircle(0, 0, RADIUS);
     #end
 
-    var bitmapData:BitmapData = Assets.getBitmapData("assets/trump_run.png");
-    var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 6, 4, SPRITE_WIDTH, SPRITE_HEIGHT);
+    var bitmapData:BitmapData = Assets.getBitmapData("assets/coin.png");
+    var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 9, 1, SPRITE_WIDTH, SPRITE_HEIGHT);
 
-    spritesheet.addBehavior(new BehaviorData("walk_south", [0, 1, 2, 3, 4, 5], true, FRAME_RATE));
-    spritesheet.addBehavior(new BehaviorData("walk_east", [6, 7, 8, 9, 10, 11], true, FRAME_RATE));
-    spritesheet.addBehavior(new BehaviorData("walk_north", [12, 13, 14, 15, 16, 17], true, FRAME_RATE));
-    spritesheet.addBehavior(new BehaviorData("walk_west", [18, 19, 20, 21, 22, 23], true, FRAME_RATE));
-
-    spritesheet.addBehavior(new BehaviorData("idle_south", [1], false, 1));
-    spritesheet.addBehavior(new BehaviorData("idle_east", [7], false, 1));
-    spritesheet.addBehavior(new BehaviorData("idle_north", [13], false, 1));
-    spritesheet.addBehavior(new BehaviorData("idle_west", [19], false, 1));
+    spritesheet.addBehavior(new BehaviorData("rotate", [0, 1, 2, 3, 4, 5, 6, 7, 8], true, FRAME_RATE));
 
     animation = new AnimatedSprite(spritesheet, true);
-    animation.x = -SPRITE_WIDTH/2;
-    animation.y = -SPRITE_HEIGHT*0.75;
+    animation.x = -SPRITE_WIDTH*Main.SCALE/2;
+    animation.y = -SPRITE_HEIGHT*Main.SCALE*0.75;
+    animation.scaleX = animation.scaleY = Main.SCALE;
     addChild(animation);
 
     lastMove = DOWN;
+
+    animation.showBehavior("rotate");
   }
 
   public function move(dir:MoveDirection):Void
@@ -69,19 +58,6 @@ class Player extends Entity
   override public function update(delta:Int):Void
   {
     super.update(delta);
-
-    if (Math.abs(velocity.x) > Math.abs(velocity.y))
-      animation.showBehavior(velocity.x > 0 ? "walk_east" : "walk_west", false);
-    else
-      animation.showBehavior(velocity.y > 0 ? "walk_south" : "walk_north", false);
-
-    if (Math.abs(velocity.x) < 0.1 && Math.abs(velocity.y) < 0.1)
-      animation.showBehavior(switch (lastMove) {
-        case UP | UP_LEFT | UP_RIGHT: "idle_north";
-        case DOWN | DOWN_LEFT | DOWN_RIGHT: "idle_south";
-        case RIGHT: "idle_east";
-        case LEFT: "idle_west";
-      });
 
     animation.update(delta);
   }
