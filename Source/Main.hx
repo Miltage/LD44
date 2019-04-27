@@ -64,7 +64,6 @@ class Main extends Sprite
   private function onClick(e:MouseEvent):Void
   {
     game.onClick(mouseX, mouseY);
-    //trace(mouseX, mouseY);
   }
 
   private function onEnterFrame(e:Event):Void

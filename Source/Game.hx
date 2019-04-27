@@ -45,8 +45,24 @@ class Game extends Sprite
   public function init():Void
   {
     worldBBs = new Array<BB>();
-    worldBBs.push(new BB(null, 300, 300, 400, 400));
-    worldBBs.push(new BB(null, 500, 300, 520, 450));
+    worldBBs.push(new BB(null, 160, 170, 175, 950));
+    worldBBs.push(new BB(null, 160, 170, 1522, 185));
+    worldBBs.push(new BB(null, 580, 170, 595, 250));
+    worldBBs.push(new BB(null, 580, 324, 595, 425));
+    worldBBs.push(new BB(null, 580, 390, 1100, 410));
+    worldBBs.push(new BB(null, 160, 920, 785, 950));
+    worldBBs.push(new BB(null, 160, 540, 785, 560));
+    worldBBs.push(new BB(null, 581, 507, 595, 560));
+    worldBBs.push(new BB(null, 770, 540, 785, 695));
+    worldBBs.push(new BB(null, 770, 815, 785, 950));
+    worldBBs.push(new BB(null, 1085, 170, 1100, 425));
+    worldBBs.push(new BB(null, 1085, 510, 1100, 560));
+    worldBBs.push(new BB(null, 900, 540, 1180, 560));
+    worldBBs.push(new BB(null, 1420, 540, 1520, 560));
+    worldBBs.push(new BB(null, 903, 540, 920, 695));
+    worldBBs.push(new BB(null, 903, 815, 920, 950));
+    worldBBs.push(new BB(null, 903, 918, 1522, 950));
+    worldBBs.push(new BB(null, 1506, 170, 1522, 950));
 
     entities = new Array<Entity>();
     navMesh = new NavMesh();
@@ -99,7 +115,11 @@ class Game extends Sprite
 
   public function onClick(mx:Float, my:Float):Void
   {
-    player.setPath(navMesh.findPath(new Point(player.x, player.y), new Point(mx, my)));
+    var xx = mx - container.x;
+    var yy = my - container.y;
+    trace(xx, yy);
+
+    player.setPath(navMesh.findPath(new Point(player.x, player.y), new Point(xx, yy)));
   }
 
   public function update():Void
@@ -132,6 +152,16 @@ class Game extends Sprite
     leftHand.setTarget(left.x, left.y);
     var right = player.getOffset(60, 30);
     rightHand.setTarget(right.x, right.y);
+
+    // move world
+    if (input.isKeyDown('W'.code))
+      container.y += 10;
+    else if (input.isKeyDown('S'.code))
+      container.y -= 10;
+    if (input.isKeyDown('A'.code))
+      container.x += 10;
+    else if (input.isKeyDown('D'.code))
+      container.x -= 10;
   }
 
   public function getBBs(bounds:BB):Array<BB>
@@ -160,7 +190,7 @@ class Game extends Sprite
     
     // draw bbs
     debug.graphics.lineStyle(1, 0x00ff00, 1);
-    for (bb in getBBs(new BB(null, 0, 0, sw, sh)))
+    for (bb in getBBs(new BB(null, 0, 0, sw * Main.SCALE, sh * Main.SCALE)))
     {
       debug.graphics.drawRect(bb.x0, bb.y0, bb.x1 - bb.x0, bb.y1 - bb.y0);
     }
