@@ -22,6 +22,7 @@ class Entity extends Sprite implements Collidable
 
   private var velocity:Point;
   private var speed:Float;
+  private var target:Point;
 
   public function new()
   {
@@ -43,8 +44,28 @@ class Entity extends Sprite implements Collidable
     if (y - radius < 0) y = radius;
     else if (y + radius > Lib.current.stage.stageHeight) y = Lib.current.stage.stageHeight - radius;
 
-    //velocity.x *= FRICTION;
-    //velocity.y *= FRICTION;
+    if (target != null)
+    {
+      var dx = target.x - x;
+      var dy = target.y - y;
+      var len = Math.sqrt(dx*dx + dy*dy);
+
+      velocity.x = dx/len;
+      velocity.y = dy/len;
+
+      if (len < radius)
+        target = null;
+    }
+    else
+    {
+      velocity.x *= FRICTION;
+      velocity.y *= FRICTION;
+    }
+  }
+
+  public function setTarget(tx:Float, ty:Float)
+  {
+    target = new Point(tx, ty);
   }
 
   public function moveToward(entity:Entity):Void

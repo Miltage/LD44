@@ -53,6 +53,11 @@ class Game extends Sprite
     }
   }
 
+  public function onClick(mx:Float, my:Float):Void
+  {
+    player.setTarget(mx, my);
+  }
+
   public function update():Void
   {
     var time = Lib.getTimer();

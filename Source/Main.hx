@@ -6,13 +6,14 @@ import openfl.display.Bitmap;
 import openfl.display.StageQuality;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 import openfl.Lib;
 import openfl.Assets;
 
 class Main extends Sprite
 {
   public static inline var SCALE:Float = 2;
-  
+
   private var game:Game;
   private var input:InputController;
   
@@ -33,6 +34,7 @@ class Main extends Sprite
     stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
     stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
     stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+    stage.addEventListener(MouseEvent.CLICK, onClick);
   }
 
   private function onKeyDown(e:KeyboardEvent):Void
@@ -52,6 +54,11 @@ class Main extends Sprite
   {
     var keyCode = Std.int(e.keyCode);
     input.onKeyUp(keyCode);
+  }
+
+  private function onClick(e:MouseEvent):Void
+  {
+    game.onClick(mouseX, mouseY);
   }
 
   private function onEnterFrame(e:Event):Void
