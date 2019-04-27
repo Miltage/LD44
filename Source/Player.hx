@@ -35,7 +35,15 @@ class Player extends Entity
     var bitmapData:BitmapData = Assets.getBitmapData("assets/coin.png");
     var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 9, 1, SPRITE_WIDTH, SPRITE_HEIGHT);
 
-    spritesheet.addBehavior(new BehaviorData("rotate", [0, 1, 2, 3, 4, 5, 6, 7, 8], true, FRAME_RATE));
+    spritesheet.addBehavior(new BehaviorData("0", [0], true, FRAME_RATE));
+    spritesheet.addBehavior(new BehaviorData("1", [1], true, FRAME_RATE));
+    spritesheet.addBehavior(new BehaviorData("2", [2], true, FRAME_RATE));
+    spritesheet.addBehavior(new BehaviorData("3", [3], true, FRAME_RATE));
+    spritesheet.addBehavior(new BehaviorData("4", [4], true, FRAME_RATE));
+    spritesheet.addBehavior(new BehaviorData("5", [5], true, FRAME_RATE));
+    spritesheet.addBehavior(new BehaviorData("6", [6], true, FRAME_RATE));
+    spritesheet.addBehavior(new BehaviorData("7", [7], true, FRAME_RATE));
+    spritesheet.addBehavior(new BehaviorData("8", [8], true, FRAME_RATE));
 
     animation = new AnimatedSprite(spritesheet, true);
     animation.x = -SPRITE_WIDTH*Main.SCALE/2;
@@ -58,6 +66,13 @@ class Player extends Entity
   override public function update(delta:Int):Void
   {
     super.update(delta);
+
+    var frame = Math.round((velocity.y + 1) * 4);
+
+    if (Math.abs(velocity.x) > 0.1 || Math.abs(velocity.y) > 0.1)
+      animation.showBehavior("" + frame);
+
+    scaleX = (velocity.x >= 0 ? 1 : -1);
 
     animation.update(delta);
   }

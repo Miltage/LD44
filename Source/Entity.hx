@@ -43,8 +43,8 @@ class Entity extends Sprite implements Collidable
     if (y - radius < 0) y = radius;
     else if (y + radius > Lib.current.stage.stageHeight) y = Lib.current.stage.stageHeight - radius;
 
-    velocity.x *= FRICTION;
-    velocity.y *= FRICTION;
+    //velocity.x *= FRICTION;
+    //velocity.y *= FRICTION;
   }
 
   public function moveToward(entity:Entity):Void
