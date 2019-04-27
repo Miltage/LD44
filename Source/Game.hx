@@ -1,8 +1,11 @@
 package;
 
 import openfl.display.Sprite;
+import openfl.display.BitmapData;
+import openfl.display.Bitmap;
 import openfl.geom.Point;
 import openfl.Lib;
+import openfl.Assets;
 
 import Entity;
 import Player;
@@ -53,6 +56,13 @@ class Game extends Sprite
 
     var sw = Lib.current.stage.stageWidth;
     var sh = Lib.current.stage.stageHeight;
+
+    {
+      var bitmapData:BitmapData = Assets.getBitmapData("assets/plot.png");
+      var plot = new Bitmap(bitmapData);
+      plot.scaleX = plot.scaleY = Main.SCALE;
+      container.addChild(plot);
+    }
 
     #if debug
     {
