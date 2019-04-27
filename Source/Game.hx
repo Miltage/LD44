@@ -118,9 +118,9 @@ class Game extends Sprite
       entity.update(delta);
 
     // keep hands at player's sides
-    var left = player.getOffset(-70, 30);
+    var left = player.getOffset(-60, 30);
     leftHand.setTarget(left.x, left.y);
-    var right = player.getOffset(70, 30);
+    var right = player.getOffset(60, 30);
     rightHand.setTarget(right.x, right.y);
   }
 
