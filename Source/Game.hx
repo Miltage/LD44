@@ -100,24 +100,6 @@ class Game extends Sprite
       }
     }
 
-    // player movement
-    if (input.isKeyDown('W'.code) && input.isKeyDown('A'.code))
-      player.move(UP_LEFT);
-    else if (input.isKeyDown('W'.code) && input.isKeyDown('D'.code))
-      player.move(UP_RIGHT);
-    else if (input.isKeyDown('S'.code) && input.isKeyDown('A'.code))
-      player.move(DOWN_LEFT);
-    else if (input.isKeyDown('S'.code) && input.isKeyDown('D'.code))
-      player.move(DOWN_RIGHT);
-    else if (input.isKeyDown('D'.code))
-      player.move(RIGHT);
-    else if (input.isKeyDown('A'.code))
-      player.move(LEFT);
-    else if (input.isKeyDown('W'.code))
-      player.move(UP);
-    else if (input.isKeyDown('S'.code))
-      player.move(DOWN);
-
     for (entity in entities)
       entity.update(delta);
 

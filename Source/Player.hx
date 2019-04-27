@@ -64,15 +64,14 @@ class Player extends Entity
   {
     super.update(delta);
 
-    var rads = Math.atan2(velocity.y, velocity.x);
+    var rads = Math.atan2(facing.y, facing.x);
     var degs = rads / Math.PI * 180 + 90;
     if (degs > 180)
       degs -= 360;
     var frame = Math.abs(Math.round(degs / (180/8)));
 
-    if (Math.abs(velocity.x) > 0.1 || Math.abs(velocity.y) > 0.1)
-      animation.showBehavior("" + frame);
-    scaleX = (velocity.x >= 0 ? 1 : -1);
+    animation.showBehavior("" + frame);
+    scaleX = (facing.x >= 0 ? 1 : -1);
 
     animation.update(delta);
   }
