@@ -9,8 +9,12 @@ import Player;
 
 class Game extends Sprite
 {
+  public static inline var SHADOW_ALPHA:Float = 0.2;
+
   private var input:InputController;
   private var player:Player;
+  private var leftHand:Hand;
+  private var rightHand:Hand;
   private var entities:Array<Entity>;
 
   private var container:Sprite;
@@ -50,6 +54,22 @@ class Game extends Sprite
       player.y = 100;
       container.addChild(player);
       entities.push(player);
+    }
+
+    {
+      leftHand = new Hand(true);
+      leftHand.x = 500;
+      leftHand.y = 100;
+      container.addChild(leftHand);
+      entities.push(leftHand);
+    }
+
+    {
+      rightHand = new Hand();
+      rightHand.x = 500;
+      rightHand.y = 100;
+      container.addChild(rightHand);
+      entities.push(rightHand);
     }
   }
 
@@ -100,5 +120,11 @@ class Game extends Sprite
 
     for (entity in entities)
       entity.update(delta);
+
+    // keep hands at player's sides
+    var left = player.getOffset(-70, 30);
+    leftHand.setTarget(left.x, left.y);
+    var right = player.getOffset(70, 30);
+    rightHand.setTarget(right.x, right.y);
   }
 }

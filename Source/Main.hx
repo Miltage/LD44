@@ -27,6 +27,8 @@ class Main extends Sprite
     var sh = Lib.current.stage.stageHeight;
 
     game = new Game(input);
+    game.graphics.beginFill(0xDEFEC8, 1);
+    game.graphics.drawRect(0, 0, sw, sh);
     addChild(game);
 
     var stage = Lib.current.stage;

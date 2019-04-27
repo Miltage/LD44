@@ -21,6 +21,7 @@ class Entity extends Sprite implements Collidable
   public static inline var FRICTION:Float = 0.6;
 
   private var velocity:Point;
+  private var facing:Point;
   private var speed:Float;
   private var target:Point;
 
@@ -28,15 +29,19 @@ class Entity extends Sprite implements Collidable
   {
     super();
 
+    #if debug
+    var radius = Reflect.field(Type.getClass(this), "RADIUS");
+    graphics.beginFill(0xff0000, 1);
+    graphics.drawEllipse(-radius/2, -radius/4, radius, radius/2);
+    #end
+
     velocity = new Point();
+    facing = new Point(0, 1);
     speed = 5;
   }
 
   public function update(delta:Int):Void
   {
-    x += velocity.x * speed;
-    y += velocity.y * speed;
-
     var radius = Reflect.field(Type.getClass(this), "RADIUS");
 
     if (x - radius < 0) x = radius;
@@ -48,18 +53,33 @@ class Entity extends Sprite implements Collidable
     {
       var dx = target.x - x;
       var dy = target.y - y;
-      var len = Math.sqrt(dx*dx + dy*dy);
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      velocity = new Point(dx, dy);
+      velocity.normalize(1);
 
-      velocity.x = dx/len;
-      velocity.y = dy/len;
+      var s = speed;
 
-      if (len < radius)
+      if (dist <= speed)
+        s = dist * 0.8;
+
+      x += velocity.x * s;
+      y += velocity.y * s;
+
+      if (dist <= radius)
         target = null;
     }
     else
     {
       velocity.x *= FRICTION;
       velocity.y *= FRICTION;
+      if (velocity.length < 0.05)
+        velocity.setTo(0, 0);
+    }
+
+    if (velocity.length > 0)
+    {
+      facing = velocity.clone();
+      facing.normalize(1);
     }
   }
 
@@ -134,5 +154,15 @@ class Entity extends Sprite implements Collidable
       case DOWN_LEFT: new Point(-0.7, 0.7);
       case DOWN_RIGHT: new Point(0.7, 0.7);
     }
+  }
+
+  public function getOffset(angle:Float, dist:Float):Point
+  {
+    var r = Math.atan2(facing.y, facing.x);
+    var degs = r * 180 / Math.PI;
+    var rads = (degs + angle) / 180 * Math.PI;
+    var mx = Math.cos(rads);
+    var my = Math.sin(rads);
+    return new Point(x + mx * dist, y + my * dist);
   }
 }
