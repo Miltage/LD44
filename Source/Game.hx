@@ -115,8 +115,8 @@ class Game extends Sprite
       for (i in 0...10)
       {
         var mobster = new Mobster();
-        mobster.x = 400;
-        mobster.y = 400;
+        mobster.x = 800;
+        mobster.y = 440;
         container.addChild(mobster);
         entities.push(mobster);
 

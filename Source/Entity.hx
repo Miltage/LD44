@@ -199,6 +199,8 @@ class Entity extends Sprite implements Collidable
     var overlap = dist - (radius1 + radius2);
     var dx = b.x - a.x;
     var dy = b.y - a.y;
+    if (dist == 0)
+      dist = 1;
     x += dx/dist*overlap/2;
     y += dy/dist*overlap/2;
   }
