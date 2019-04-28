@@ -23,8 +23,10 @@ class Game extends Sprite
   private var objects:Array<Interactable>;
   private var bullets:Array<Bullet>;
   private var worldBBs:Array<BB>;
+  private var mobsters:Array<Mobster>;
 
   private var container:Sprite;
+  private var flashSprite:Sprite;
   private var debug:Sprite;
   private var tooltip:Tooltip;
 
@@ -52,6 +54,7 @@ class Game extends Sprite
     entities = new Array<Entity>();
     objects = new Array<Interactable>();
     bullets = new Array<Bullet>();
+    mobsters = new Array<Mobster>();
 
     container = new Sprite();
     addChild(container);
@@ -61,6 +64,12 @@ class Game extends Sprite
 
     var sw = Lib.current.stage.stageWidth;
     var sh = Lib.current.stage.stageHeight;
+
+    flashSprite = new Sprite();
+    flashSprite.graphics.beginFill(0xFFFFFF, 0.8);
+    flashSprite.graphics.drawRect(0, 0, sw, sh);
+    flashSprite.visible = false;
+    addChild(flashSprite);
 
     {
       var bitmapData:BitmapData = Assets.getBitmapData("assets/scene.png");
@@ -119,6 +128,7 @@ class Game extends Sprite
         mobster.y = 440;
         container.addChild(mobster);
         entities.push(mobster);
+        mobsters.push(mobster);
 
         var hands = new TwoHands();
         hands.setOwner(mobster);
@@ -145,7 +155,7 @@ class Game extends Sprite
   {
     var dir = origin.getFacingDirection();
     var barrel = origin.getShootPosition();
-    var bullet = new Bullet(barrel.x, barrel.y, dir.x, dir.y);
+    var bullet = new Bullet(origin, barrel.x, barrel.y, dir.x, dir.y);
     container.addChild(bullet);
     bullets.push(bullet);
     origin.shoot();
@@ -222,6 +232,7 @@ class Game extends Sprite
 
     tooltip.x = mouseX;
     tooltip.y = mouseY;
+    flashSprite.visible = false;
 
     for (entity in entities)
       entity.update(delta);
@@ -233,10 +244,22 @@ class Game extends Sprite
     {
       bullet.update(delta);
 
-      if (bullet.x > sw || bullet.x < 0 || bullet.y > sh || bullet.y < 0)
+      if (bullet.flaggedForRemoval() || bullet.x > sw || bullet.x < 0 || bullet.y > sh || bullet.y < 0)
       {
         bullets.remove(bullet);
         container.removeChild(bullet);
+      }
+
+      bullet.doHitDetection(entities);
+    }
+
+    for (mobster in mobsters)
+    {
+      if (mobster.isDead())
+      {
+        container.removeChild(mobster);
+        entities.remove(mobster);
+        mobsters.remove(mobster);
       }
     }
   }
@@ -276,5 +299,10 @@ class Game extends Sprite
     {
       debug.graphics.drawRect(bb.x0, bb.y0, bb.x1 - bb.x0, bb.y1 - bb.y0);
     }
+  }
+
+  public function flash():Void
+  {
+    flashSprite.visible = true;
   }
 }

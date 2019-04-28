@@ -81,6 +81,11 @@ class TwoHands extends Entity
     addChild(muzzleFlash);
   }
 
+  public function getOwner():Combatant
+  {
+    return owner;
+  }
+
   public function setOwner(c:Combatant):Void
   {
     owner = c;

@@ -29,6 +29,7 @@ class Mobster extends Entity implements Combatant
   private var weapon:WeaponType;
   private var lastFire:Float;
   private var hands:TwoHands;
+  private var hp:Int;
 
   public function new()
   {
@@ -64,6 +65,7 @@ class Mobster extends Entity implements Combatant
 
     faceMoving = false;
     lastFire = 0;
+    hp = 4;
     weapon = Math.random() > .5 ? REVOLVER : TOMMY;
 
     animation.showBehavior("8");
@@ -162,5 +164,15 @@ class Mobster extends Entity implements Combatant
     var mx = Math.cos(rads);
     var my = Math.sin(rads);
     target = new Point(player.x + mx * fightDistance, player.y + my * fightDistance);
+  }
+
+  override public function takeDamage(amount:Int):Void
+  {
+    hp -= amount;
+  }
+
+  public function isDead():Bool
+  {
+    return hp <= 0;
   }
 }

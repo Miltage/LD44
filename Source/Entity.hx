@@ -239,4 +239,9 @@ class Entity extends Sprite implements Collidable
     var my = Math.sin(rads);
     return new Point(x + mx * dist, y + my * dist);
   }
+
+  public function takeDamage(amount:Int):Void
+  {
+
+  }
 }
