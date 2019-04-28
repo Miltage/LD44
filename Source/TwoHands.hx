@@ -153,4 +153,16 @@ class TwoHands extends Entity
     }
     return new Point(x + offset * facing.x, y + offset * facing.y);
   }
+
+  override public function getFacingDirection():Point
+  {
+    var deviation = switch (owner.getWeapon()) {
+      case TOMMY: 1;
+      case REVOLVER: 0.25;
+      case NONE: 0;
+    };
+    var f = facing.add(new Point(Math.random() * deviation - deviation/2, Math.random() * deviation - deviation/2));
+    f.normalize(1);
+    return f;
+  }
 }

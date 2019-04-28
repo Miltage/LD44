@@ -156,7 +156,7 @@ class Mobster extends Entity implements Combatant
 
   override public function collidesWith(entity:Entity):Bool
   {
-    return Std.is(entity, TwoHands);
+    return Std.is(entity, Mobster) || Std.is(entity, Player);
   }
 
   private function decideFightDistance(player:Player):Void
