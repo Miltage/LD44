@@ -13,16 +13,16 @@ import spritesheet.importers.BitmapImporter;
 
 import Entity;
 
-class Player extends Entity
+class Player extends Entity implements Combatant
 {
   public static inline var FRAME_RATE:Int = 12;
   public static inline var RADIUS:Int = 30;
-  public static inline var SPEED:Float = 200;
+  public static inline var SPEED:Float = 250;
   public static inline var SPRITE_WIDTH:Int = 50;
   public static inline var SPRITE_HEIGHT:Int = 50;
 
   private var animation:AnimatedSprite;
-  private var lastMove:MoveDirection;
+  private var weapon:WeaponType;
 
   public function new()
   {
@@ -56,17 +56,25 @@ class Player extends Entity
       addChild(animation);
     }
 
-    lastMove = DOWN;
+    weapon = REVOLVER;
 
     animation.showBehavior("8");
+  }
+
+  public function getWeapon():WeaponType
+  {
+    return weapon;
+  }
+
+  public function setWeapon(w:WeaponType):Void
+  {
+    weapon = w;
   }
 
   public function move(dir:MoveDirection):Void
   {
     targetVelocity = getDirection(dir);
     targetVelocity.normalize(SPEED);
-
-    lastMove = dir;
   }
 
   public function stop():Void

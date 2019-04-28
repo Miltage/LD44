@@ -10,13 +10,6 @@ import openfl.Assets;
 import Entity;
 import Player;
 
-enum WeaponType
-{
-  NONE;
-  REVOLVER;
-  TOMMY;
-}
-
 class Game extends Sprite
 {
   public static inline var SHADOW_ALPHA:Float = 0.2;
@@ -36,7 +29,6 @@ class Game extends Sprite
   private var tooltip:Tooltip;
 
   private var lastTime:Int;
-  private var weapon:WeaponType;
 
   public function new(input:InputController)
   {
@@ -67,8 +59,6 @@ class Game extends Sprite
     tooltip = new Tooltip();
     addChild(tooltip);
 
-    weapon = TOMMY;
-
     var sw = Lib.current.stage.stageWidth;
     var sh = Lib.current.stage.stageHeight;
 
@@ -93,6 +83,7 @@ class Game extends Sprite
       player.y = 400;
       container.addChild(player);
       entities.push(player);
+      player.setWeapon(REVOLVER);
     }
 
     {
@@ -117,6 +108,7 @@ class Game extends Sprite
       twoHands.y = player.y;
       container.addChild(twoHands);
       entities.push(twoHands);
+      twoHands.setOwner(player);
     }
 
     {
@@ -127,6 +119,11 @@ class Game extends Sprite
         mobster.y = 400;
         container.addChild(mobster);
         entities.push(mobster);
+
+        var hands = new TwoHands();
+        hands.setOwner(mobster);
+        container.addChild(hands);
+        entities.push(hands);
       }
     }
   }
@@ -136,7 +133,7 @@ class Game extends Sprite
     var xx = mx - container.x;
     var yy = my - container.y;
 
-    if (weapon != NONE)
+    if (player.getWeapon() != NONE)
     {
       var barrel = twoHands.getShootPosition();
       var dir = twoHands.getFacingDirection();
@@ -183,11 +180,11 @@ class Game extends Sprite
     twoHands.setTarget(front.x, front.y);
 
     // show correct weapon
-    leftHand.visible = weapon == NONE;
-    rightHand.visible = weapon == NONE;
-    twoHands.visible = weapon != NONE;
+    leftHand.visible = player.getWeapon() == NONE;
+    rightHand.visible = player.getWeapon() == NONE;
+    twoHands.visible = player.getWeapon() != NONE;
 
-    if (weapon != NONE)
+    if (player.getWeapon() != NONE)
     {
       player.setFaceMoving(false);
       player.facePoint(mouseX, mouseY);
@@ -254,11 +251,6 @@ class Game extends Sprite
     }*/
 
     return list;
-  }
-
-  public function getCurrentWeapon():WeaponType
-  {
-    return weapon;
   }
 
   public function getPlayer():Player

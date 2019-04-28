@@ -219,6 +219,11 @@ class Entity extends Sprite implements Collidable
     }
   }
 
+  public function setFacingDirection(x:Float, y:Float):Void
+  {
+    facing.setTo(x, y);
+  }
+
   public function getFacingDirection():Point
   {
     return facing;

@@ -23,6 +23,7 @@ class TwoHands extends Entity
   private var revolver:AnimatedSprite;
   private var tommy:AnimatedSprite;
   private var muzzleFlash:Sprite;
+  private var owner:Combatant;
 
   private var shooting:Bool;
 
@@ -80,6 +81,11 @@ class TwoHands extends Entity
     addChild(muzzleFlash);
   }
 
+  public function setOwner(c:Combatant):Void
+  {
+    owner = c;
+  }
+
   override public function update(delta:Int):Void
   {
     super.update(delta);
@@ -90,26 +96,33 @@ class TwoHands extends Entity
       degs += 360;
     var frame = Math.abs(Math.round(degs / (360/8))) % 8;
 
-    var animation = switch (Main.getGameInstance().getCurrentWeapon())
-    {
-      case REVOLVER: revolver;
-      case TOMMY: tommy;
-      default: null;
-    }
-
-    if (animation != null)
-    {
-      animation.showBehavior("" + frame);
-      animation.update(delta);
-    }
-
-    revolver.visible = Main.getGameInstance().getCurrentWeapon() == REVOLVER;
-    tommy.visible = Main.getGameInstance().getCurrentWeapon() == TOMMY;
-
     muzzleFlash.visible = shooting;
 
     if (shooting)
       shooting = false;
+
+    if (owner != null)
+    {
+      var front = owner.getOffset(0, 45);
+      setTarget(front.x, front.y);
+      setFacingDirection(owner.getFacingDirection().x, owner.getFacingDirection().y);
+
+      var animation = switch (owner.getWeapon())
+      {
+        case REVOLVER: revolver;
+        case TOMMY: tommy;
+        default: null;
+      }
+
+      if (animation != null)
+      {
+        animation.showBehavior("" + frame);
+        animation.update(delta);
+      }
+
+      revolver.visible = owner.getWeapon() == REVOLVER;
+      tommy.visible = owner.getWeapon() == TOMMY;
+    }
   }
 
   public function shoot(player:Player):Void
@@ -126,7 +139,9 @@ class TwoHands extends Entity
 
   public function getShootPosition():Point
   {
-    var offset = switch (Main.getGameInstance().getCurrentWeapon()) {
+    if (owner == null) return new Point(0, 0);
+
+    var offset = switch (owner.getWeapon()) {
       case REVOLVER: 20;
       case TOMMY: 30;
       default: 0;
