@@ -88,7 +88,10 @@ class Entity extends Sprite implements Collidable
 
     if (velocity.length > 0.05)
     {
-      facing = velocity.clone();
+      var dfx = facing.x - velocity.x;
+      var dfy = facing.y - velocity.y;
+      facing.x -= dfx * 0.2;
+      facing.y -= dfy * 0.2;
       facing.normalize(1);
     }
   }
