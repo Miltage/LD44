@@ -22,10 +22,13 @@ class Mobster extends Entity implements Combatant
   public static inline var SPRITE_HEIGHT:Int = 50;
   public static inline var FIGHT_RADIUS_MIN:Int = 200;
   public static inline var FIGHT_RADIUS_MAX:Int = 300;
+  public static inline var SHOOT_DELAY:Int = 1000;
 
   private var animation:AnimatedSprite;
   private var fightDistance:Int;
   private var weapon:WeaponType;
+  private var lastFire:Float;
+  private var hands:TwoHands;
 
   public function new()
   {
@@ -60,6 +63,7 @@ class Mobster extends Entity implements Combatant
     }
 
     faceMoving = false;
+    lastFire = 0;
     weapon = Math.random() > .5 ? REVOLVER : TOMMY;
 
     animation.showBehavior("8");
@@ -117,6 +121,26 @@ class Mobster extends Entity implements Combatant
     }
 
     facePoint(player.x, player.y);
+
+    var time = Lib.getTimer();
+    if (time - lastFire > SHOOT_DELAY)
+    {
+      lastFire = time + Math.random() * SHOOT_DELAY * 0.25;
+      fireWeapon();
+    }
+  }
+
+  public function setHands(h:TwoHands):Void
+  {
+    hands = h;
+  }
+
+  private function fireWeapon():Void
+  {
+    if (hands == null)
+      return;
+
+    Main.getGameInstance().addBullet(hands);
   }
 
   override public function collidesWith(entity:Entity):Bool

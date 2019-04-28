@@ -125,7 +125,7 @@ class TwoHands extends Entity
     }
   }
 
-  public function shoot(player:Player):Void
+  public function shoot():Void
   {
     var barrel = getShootPosition();
     muzzleFlash.x = barrel.x - x;
@@ -134,7 +134,7 @@ class TwoHands extends Entity
 
     velocity.x = -facing.x * 160;
     velocity.y = -facing.y * 160;
-    player.push(velocity.x/2, velocity.y/2);
+    owner.push(velocity.x/2, velocity.y/2);
   }
 
   public function getShootPosition():Point

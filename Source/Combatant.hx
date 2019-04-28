@@ -7,4 +7,5 @@ interface Combatant {
   public function setWeapon(w:WeaponType):Void;
   public function getOffset(angle:Float, dist:Float):Point;
   public function getFacingDirection():Point;
+  public function push(dx:Float, dy:Float):Void;
 }

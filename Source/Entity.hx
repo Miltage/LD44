@@ -100,7 +100,6 @@ class Entity extends Sprite implements Collidable
     if (targetVelocity.length < 0.1)
     {
       targetVelocity.setTo(0, 0);
-      velocity.setTo(0, 0);
     }    
 
     if (y - radius/2 < 300)

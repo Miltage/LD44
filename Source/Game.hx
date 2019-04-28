@@ -124,6 +124,8 @@ class Game extends Sprite
         hands.setOwner(mobster);
         container.addChild(hands);
         entities.push(hands);
+
+        mobster.setHands(hands);
       }
     }
   }
@@ -135,13 +137,18 @@ class Game extends Sprite
 
     if (player.getWeapon() != NONE)
     {
-      var barrel = twoHands.getShootPosition();
-      var dir = twoHands.getFacingDirection();
-      var bullet = new Bullet(barrel.x, barrel.y, dir.x, dir.y);
-      container.addChild(bullet);
-      bullets.push(bullet);
-      twoHands.shoot(player);
+      addBullet(twoHands);
     }
+  }
+
+  public function addBullet(origin:TwoHands):Void
+  {
+    var dir = origin.getFacingDirection();
+    var barrel = origin.getShootPosition();
+    var bullet = new Bullet(barrel.x, barrel.y, dir.x, dir.y);
+    container.addChild(bullet);
+    bullets.push(bullet);
+    origin.shoot();
   }
 
   public function update():Void
