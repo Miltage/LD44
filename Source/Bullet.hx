@@ -33,8 +33,13 @@ class Bullet extends Sprite
       drawn = true;
       return;
     }
-    
+
     x += velocity.x;
     y += velocity.y;
+  }
+
+  public function getLength():Float
+  {
+    return velocity.length;
   }
 }

@@ -141,6 +141,9 @@ class Game extends Sprite
     var delta = time - lastTime;
     lastTime = time;
 
+    var sw = Lib.current.stage.stageWidth;
+    var sh = Lib.current.stage.stageHeight;
+
     // collision
     for (i in 0...entities.length)
       for (j in (i + 1)...entities.length)
@@ -211,7 +214,15 @@ class Game extends Sprite
       object.handleCursor(mouseX, mouseY, tooltip);
 
     for (bullet in bullets)
+    {
       bullet.update(delta);
+
+      if (bullet.x > sw || bullet.x < 0 || bullet.y > sh || bullet.y < 0)
+      {
+        bullets.remove(bullet);
+        container.removeChild(bullet);
+      }
+    }
   }
 
   public function getBBs(bounds:BB):Array<BB>
