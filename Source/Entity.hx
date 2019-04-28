@@ -46,6 +46,11 @@ class Entity extends Sprite implements Collidable
     var radius = Reflect.field(Type.getClass(this), "RADIUS");
     var speed = Reflect.field(Type.getClass(this), "SPEED");
 
+    if (x - radius < 0) x = radius;
+    else if (x + radius > Lib.current.stage.stageWidth) x = Lib.current.stage.stageWidth - radius;
+    if (y - radius < 290) y = 290 + radius;
+    else if (y + radius > Lib.current.stage.stageHeight) y = Lib.current.stage.stageHeight - radius;
+
     if (target != null)
     {
       var dx = target.x - x;

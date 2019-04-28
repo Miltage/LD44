@@ -13,21 +13,7 @@ class NavMesh
   {
     nodes = new Array<NavPoint>();
 
-    addNode(100, 140);
-    addNode(109, 981);
-    addNode(852, 1007);
-    addNode(842, 757);
-    addNode(841, 469);
-    addNode(512, 468);
-    addNode(1143, 466);
-    addNode(517, 278);
-    addNode(652, 280);
-    addNode(698, 752);
-    addNode(964, 744);
-    addNode(1300, 586);
-    addNode(1300, 370);
-    addNode(1890, 995);
-    addNode(1565, 128);
+    //addNode(100, 140);
 
   }
 

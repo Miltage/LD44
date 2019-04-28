@@ -47,24 +47,6 @@ class Game extends Sprite
   public function init():Void
   {
     worldBBs = new Array<BB>();
-    worldBBs.push(new BB(null, 160, 170, 175, 950));
-    worldBBs.push(new BB(null, 160, 170, 1522, 185));
-    worldBBs.push(new BB(null, 580, 170, 595, 250));
-    worldBBs.push(new BB(null, 580, 324, 595, 425));
-    worldBBs.push(new BB(null, 580, 390, 1100, 410));
-    worldBBs.push(new BB(null, 160, 920, 785, 950));
-    worldBBs.push(new BB(null, 160, 540, 785, 560));
-    worldBBs.push(new BB(null, 581, 507, 595, 560));
-    worldBBs.push(new BB(null, 770, 540, 785, 695));
-    worldBBs.push(new BB(null, 770, 815, 785, 950));
-    worldBBs.push(new BB(null, 1085, 170, 1100, 425));
-    worldBBs.push(new BB(null, 1085, 510, 1100, 560));
-    worldBBs.push(new BB(null, 900, 540, 1180, 560));
-    worldBBs.push(new BB(null, 1420, 540, 1520, 560));
-    worldBBs.push(new BB(null, 903, 540, 920, 695));
-    worldBBs.push(new BB(null, 903, 815, 920, 950));
-    worldBBs.push(new BB(null, 903, 918, 1522, 950));
-    worldBBs.push(new BB(null, 1506, 170, 1522, 950));
 
     entities = new Array<Entity>();
     objects = new Array<Interactable>();
@@ -80,7 +62,7 @@ class Game extends Sprite
     var sh = Lib.current.stage.stageHeight;
 
     {
-      var bitmapData:BitmapData = Assets.getBitmapData("assets/plot.png");
+      var bitmapData:BitmapData = Assets.getBitmapData("assets/scene.png");
       var plot = new Bitmap(bitmapData);
       plot.scaleX = plot.scaleY = Main.SCALE;
       container.addChild(plot);
@@ -131,9 +113,6 @@ class Game extends Sprite
   {
     var xx = mx - container.x;
     var yy = my - container.y;
-    trace(xx, yy);
-
-    player.setPath(navMesh.findPath(new Point(player.x, player.y), new Point(xx, yy)));
   }
 
   public function update():Void
@@ -172,15 +151,25 @@ class Game extends Sprite
     var right = player.getOffset(60, 30);
     rightHand.setTarget(right.x, right.y);
 
-    // move world
-    if (input.isKeyDown('W'.code))
-      container.y += 10;
-    else if (input.isKeyDown('S'.code))
-      container.y -= 10;
-    if (input.isKeyDown('A'.code))
-      container.x += 10;
+    // player movement
+    if (input.isKeyDown('W'.code) && input.isKeyDown('A'.code))
+      player.move(UP_LEFT);
+    else if (input.isKeyDown('W'.code) && input.isKeyDown('D'.code))
+      player.move(UP_RIGHT);
+    else if (input.isKeyDown('S'.code) && input.isKeyDown('A'.code))
+      player.move(DOWN_LEFT);
+    else if (input.isKeyDown('S'.code) && input.isKeyDown('D'.code))
+      player.move(DOWN_RIGHT);
     else if (input.isKeyDown('D'.code))
-      container.x -= 10;
+      player.move(RIGHT);
+    else if (input.isKeyDown('A'.code))
+      player.move(LEFT);
+    else if (input.isKeyDown('W'.code))
+      player.move(UP);
+    else if (input.isKeyDown('S'.code))
+      player.move(DOWN);
+    else
+      player.stop();
 
     tooltip.x = mouseX;
     tooltip.y = mouseY;

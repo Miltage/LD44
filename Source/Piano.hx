@@ -7,5 +7,10 @@ class Piano extends Interactable
   {
     super();
   }
+
+  override public function getActionString():String
+  {
+    return "Play piano";
+  }
   
 }

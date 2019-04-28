@@ -56,9 +56,15 @@ class Player extends Entity
 
   public function move(dir:MoveDirection):Void
   {
-    velocity = getDirection(dir);
+    targetVelocity = getDirection(dir);
+    targetVelocity.normalize(SPEED);
 
     lastMove = dir;
+  }
+
+  public function stop():Void
+  {
+    targetVelocity.setTo(0, 0);
   }
 
   override public function update(delta:Int):Void
