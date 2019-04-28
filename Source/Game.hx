@@ -25,6 +25,7 @@ class Game extends Sprite
 
   private var container:Sprite;
   private var debug:Sprite;
+  private var tooltip:Tooltip;
 
   private var lastTime:Int;
 
@@ -71,6 +72,9 @@ class Game extends Sprite
 
     container = new Sprite();
     addChild(container);
+
+    tooltip = new Tooltip();
+    addChild(tooltip);
 
     var sw = Lib.current.stage.stageWidth;
     var sh = Lib.current.stage.stageHeight;
@@ -154,11 +158,13 @@ class Game extends Sprite
       }
     }
 
+    tooltip.visible = false;
+
     for (entity in entities)
       entity.update(delta);
 
     for (object in objects)
-      object.handleCursor(mouseX, mouseY);
+      object.handleCursor(mouseX, mouseY, tooltip);
 
     // keep hands at player's sides
     var left = player.getOffset(-60, 30);
@@ -175,6 +181,9 @@ class Game extends Sprite
       container.x += 10;
     else if (input.isKeyDown('D'.code))
       container.x -= 10;
+
+    tooltip.x = mouseX;
+    tooltip.y = mouseY;
   }
 
   public function getBBs(bounds:BB):Array<BB>

@@ -53,12 +53,17 @@ class Interactable extends Sprite
     }
   }
 
-  public function handleCursor(mx:Float, my:Float):Void
+  public function handleCursor(mx:Float, my:Float, tooltip:Tooltip):Void
   {
-    highlight.visible = hitTestPoint(mx, my);
+    var hit = hitTestPoint(mx, my);
+
+    highlight.visible = hit;
+
+    if (hit)
+      tooltip.setText(getActionString());
   }
 
-  public function getAction():String
+  public function getActionString():String
   {
     return "Example action";
   }
