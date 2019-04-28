@@ -13,23 +13,26 @@ import spritesheet.importers.BitmapImporter;
 
 import Entity;
 
-class Player extends Entity
+class Mobster extends Entity
 {
   public static inline var FRAME_RATE:Int = 12;
   public static inline var RADIUS:Int = 30;
   public static inline var SPEED:Float = 200;
   public static inline var SPRITE_WIDTH:Int = 50;
   public static inline var SPRITE_HEIGHT:Int = 50;
+  public static inline var FIGHT_RADIUS_MIN:Int = 200;
+  public static inline var FIGHT_RADIUS_MAX:Int = 300;
 
   private var animation:AnimatedSprite;
   private var lastMove:MoveDirection;
+  private var fightDistance:Int;
 
   public function new()
   {
     super();
 
     {
-      var bitmapData:BitmapData = Assets.getBitmapData("assets/coin.png");
+      var bitmapData:BitmapData = Assets.getBitmapData("assets/coin2.png");
       var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 16, 1, SPRITE_WIDTH, SPRITE_HEIGHT);
 
       spritesheet.addBehavior(new BehaviorData("0", [0], true, FRAME_RATE));
@@ -56,9 +59,12 @@ class Player extends Entity
       addChild(animation);
     }
 
+    faceMoving = false;
     lastMove = DOWN;
 
     animation.showBehavior("8");
+
+    decideFightDistance(Main.getGameInstance().getPlayer());
   }
 
   public function move(dir:MoveDirection):Void
@@ -78,10 +84,8 @@ class Player extends Entity
   {
     super.update(delta);
 
-    if (x - RADIUS < 0) x = RADIUS;
-    else if (x + RADIUS > Lib.current.stage.stageWidth) x = Lib.current.stage.stageWidth - RADIUS;
-    if (y - RADIUS/2 < 300) y = 300 + RADIUS/2;
-    else if (y + RADIUS/2 > Lib.current.stage.stageHeight) y = Lib.current.stage.stageHeight - RADIUS/2;
+    var sw = Lib.current.stage.stageWidth;
+    var sh = Lib.current.stage.stageHeight;
 
     var rads = Math.atan2(facing.y, facing.x);
     var degs = rads / Math.PI * 180 + 90;
@@ -92,10 +96,39 @@ class Player extends Entity
     animation.showBehavior("" + frame);
 
     animation.update(delta);
+
+    var player = Main.getGameInstance().getPlayer();
+
+    var dx = player.x - x;
+    var dy = player.y - y;
+    var dist = Math.sqrt(dx*dx + dy*dy);
+
+    if (y > sh + RADIUS || x < -RADIUS || x > sw + RADIUS || target == null && (dist < fightDistance - RADIUS || dist > fightDistance + (FIGHT_RADIUS_MAX - FIGHT_RADIUS_MIN)))
+    {
+      decideFightDistance(player);
+    }
+
+    facePoint(player.x, player.y);
   }
 
   override public function collidesWith(entity:Entity):Bool
   {
     return Std.is(entity, Player);
+  }
+
+  private function decideFightDistance(player:Player):Void
+  {
+    var dx = x - player.x;
+    var dy = y - player.y;
+    var r = Math.atan2(dy, dx);
+    var degs = r * 180 / Math.PI;
+
+    fightDistance = Math.round(FIGHT_RADIUS_MIN + (FIGHT_RADIUS_MAX - FIGHT_RADIUS_MIN) * Math.random());
+
+    var angle = degs + Math.random() * 90 - 45;
+    var rads = angle / 180 * Math.PI;    
+    var mx = Math.cos(rads);
+    var my = Math.sin(rads);
+    target = new Point(player.x + mx * fightDistance, player.y + my * fightDistance);
   }
 }

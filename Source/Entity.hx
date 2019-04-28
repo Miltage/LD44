@@ -48,11 +48,6 @@ class Entity extends Sprite implements Collidable
     var radius = Reflect.field(Type.getClass(this), "RADIUS");
     var speed = Reflect.field(Type.getClass(this), "SPEED");
 
-    if (x - radius < 0) x = radius;
-    else if (x + radius > Lib.current.stage.stageWidth) x = Lib.current.stage.stageWidth - radius;
-    if (y - radius < 290) y = 290 + radius;
-    else if (y + radius > Lib.current.stage.stageHeight) y = Lib.current.stage.stageHeight - radius;
-
     if (target != null)
     {
       var dx = target.x - x;
@@ -101,6 +96,18 @@ class Entity extends Sprite implements Collidable
       facing.y -= dfy * 0.2;
       facing.normalize(1);
     }
+
+    if (targetVelocity.length < 0.1)
+    {
+      targetVelocity.setTo(0, 0);
+      velocity.setTo(0, 0);
+    }    
+
+    if (y - radius/2 < 300)
+    { 
+      y = 300 + radius/2;
+      target = null;
+    }
   }
 
   public function setFaceMoving(fm:Bool):Void
@@ -134,10 +141,22 @@ class Entity extends Sprite implements Collidable
 
   public function moveToward(entity:Entity):Void
   {
+    var speed = Reflect.field(Type.getClass(this), "SPEED");
     var dx = entity.x - x;
     var dy = entity.y - y;
-    velocity = new Point(dx, dy);
-    velocity.normalize(1);
+    var dist = Math.sqrt(dx*dx + dy*dy);
+    targetVelocity = new Point(dx, dy);
+    targetVelocity.normalize(Math.min(dist, speed));
+  }
+
+  public function moveAwayFrom(entity:Entity):Void
+  {
+    var speed = Reflect.field(Type.getClass(this), "SPEED");
+    var dx = entity.x - x;
+    var dy = entity.y - y;
+    var dist = Math.sqrt(dx*dx + dy*dy);
+    targetVelocity = new Point(-dx, -dy);
+    targetVelocity.normalize(Math.min(dist, speed));
   }
 
   public function withinDistance(x:Int, y:Int, radius:Int):Bool

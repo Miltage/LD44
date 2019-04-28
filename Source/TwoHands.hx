@@ -128,6 +128,7 @@ class TwoHands extends Entity
   {
     var offset = switch (Main.getGameInstance().getCurrentWeapon()) {
       case REVOLVER: 20;
+      case TOMMY: 30;
       default: 0;
     }
     return new Point(x + offset * facing.x, y + offset * facing.y);

@@ -67,7 +67,7 @@ class Game extends Sprite
     tooltip = new Tooltip();
     addChild(tooltip);
 
-    weapon = REVOLVER;
+    weapon = TOMMY;
 
     var sw = Lib.current.stage.stageWidth;
     var sh = Lib.current.stage.stageHeight;
@@ -117,6 +117,17 @@ class Game extends Sprite
       twoHands.y = player.y;
       container.addChild(twoHands);
       entities.push(twoHands);
+    }
+
+    {
+      for (i in 0...10)
+      {
+        var mobster = new Mobster();
+        mobster.x = 400;
+        mobster.y = 400;
+        container.addChild(mobster);
+        entities.push(mobster);
+      }
     }
   }
 
@@ -248,6 +259,11 @@ class Game extends Sprite
   public function getCurrentWeapon():WeaponType
   {
     return weapon;
+  }
+
+  public function getPlayer():Player
+  {
+    return player;
   }
 
   private function drawDebug():Void
