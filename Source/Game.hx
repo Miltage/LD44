@@ -18,6 +18,7 @@ class Game extends Sprite
   private var player:Player;
   private var leftHand:Hand;
   private var rightHand:Hand;
+  private var twoHands:TwoHands;
   private var entities:Array<Entity>;
   private var objects:Array<Interactable>;
   private var worldBBs:Array<BB>;
@@ -101,11 +102,11 @@ class Game extends Sprite
     }
 
     {
-      var piano = new Piano();
-      piano.x = 1400;
-      piano.y = 400;
-      container.addChild(piano);
-      objects.push(piano);
+      twoHands = new TwoHands();
+      twoHands.x = player.x;
+      twoHands.y = player.y;
+      container.addChild(twoHands);
+      entities.push(twoHands);
     }
   }
 
@@ -150,6 +151,8 @@ class Game extends Sprite
     leftHand.setTarget(left.x, left.y);
     var right = player.getOffset(60, 30);
     rightHand.setTarget(right.x, right.y);
+    var front = player.getOffset(0, 40);
+    twoHands.setTarget(front.x, front.y);
 
     // player movement
     if (input.isKeyDown('W'.code) && input.isKeyDown('A'.code))

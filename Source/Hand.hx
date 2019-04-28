@@ -85,7 +85,7 @@ class Hand extends Entity
     var degs = rads / Math.PI * 180 - 90;
     if (degs < 0)
       degs += 360;
-    var frame = Math.abs(Math.floor(degs / (360/16)));
+    var frame = Math.abs(Math.round(degs / (360/16))) % 16;
 
     if (inverted)
       frame += 16;

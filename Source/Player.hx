@@ -30,7 +30,7 @@ class Player extends Entity
 
     {
       var bitmapData:BitmapData = Assets.getBitmapData("assets/coin.png");
-      var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 9, 1, SPRITE_WIDTH, SPRITE_HEIGHT);
+      var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 16, 1, SPRITE_WIDTH, SPRITE_HEIGHT);
 
       spritesheet.addBehavior(new BehaviorData("0", [0], true, FRAME_RATE));
       spritesheet.addBehavior(new BehaviorData("1", [1], true, FRAME_RATE));
@@ -41,6 +41,13 @@ class Player extends Entity
       spritesheet.addBehavior(new BehaviorData("6", [6], true, FRAME_RATE));
       spritesheet.addBehavior(new BehaviorData("7", [7], true, FRAME_RATE));
       spritesheet.addBehavior(new BehaviorData("8", [8], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("9", [9], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("10", [10], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("11", [11], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("12", [12], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("13", [13], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("14", [14], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("15", [15], true, FRAME_RATE));
 
       animation = new AnimatedSprite(spritesheet, true);
       animation.x = -SPRITE_WIDTH * Main.SCALE/2;
@@ -73,12 +80,11 @@ class Player extends Entity
 
     var rads = Math.atan2(facing.y, facing.x);
     var degs = rads / Math.PI * 180 + 90;
-    if (degs > 180)
-      degs -= 360;
-    var frame = Math.abs(Math.round(degs / (180/8)));
+    if (degs < 0)
+      degs += 360;
+    var frame = Math.abs(Math.floor(degs / (360/16)));
 
     animation.showBehavior("" + frame);
-    scaleX = (facing.x >= 0 ? 1 : -1);
 
     animation.update(delta);
   }
