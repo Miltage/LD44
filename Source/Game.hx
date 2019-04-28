@@ -19,6 +19,7 @@ class Game extends Sprite
   private var leftHand:Hand;
   private var rightHand:Hand;
   private var entities:Array<Entity>;
+  private var objects:Array<Interactable>;
   private var worldBBs:Array<BB>;
   private var navMesh:NavMesh;
 
@@ -65,6 +66,7 @@ class Game extends Sprite
     worldBBs.push(new BB(null, 1506, 170, 1522, 950));
 
     entities = new Array<Entity>();
+    objects = new Array<Interactable>();
     navMesh = new NavMesh();
 
     container = new Sprite();
@@ -111,6 +113,14 @@ class Game extends Sprite
       container.addChild(rightHand);
       entities.push(rightHand);
     }
+
+    {
+      var piano = new Piano();
+      piano.x = 1400;
+      piano.y = 400;
+      container.addChild(piano);
+      objects.push(piano);
+    }
   }
 
   public function onClick(mx:Float, my:Float):Void
@@ -146,6 +156,9 @@ class Game extends Sprite
 
     for (entity in entities)
       entity.update(delta);
+
+    for (object in objects)
+      object.handleCursor(mouseX, mouseY);
 
     // keep hands at player's sides
     var left = player.getOffset(-60, 30);

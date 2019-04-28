@@ -110,8 +110,6 @@ class NavMesh
     for (node in nodes)
       node.parent = null;
 
-    trace(result);
-
     var last = 0;
     var first = result.length - 1;
     for (i in 0...result.length)
@@ -127,8 +125,6 @@ class NavMesh
     }
     result.splice(1, last - 1);
     result.splice(first, result.length - first);
-
-    trace(result);
 
     return result;
   }
