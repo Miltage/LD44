@@ -30,6 +30,7 @@ class Mobster extends Entity implements Combatant
   private var lastFire:Float;
   private var hands:TwoHands;
   private var hp:Int;
+  private var shootDelay:Int;
 
   public function new()
   {
@@ -67,6 +68,10 @@ class Mobster extends Entity implements Combatant
     lastFire = 0;
     hp = 4;
     weapon = Math.random() > .5 ? REVOLVER : TOMMY;
+    shootDelay = switch (weapon) {
+      case TOMMY: Math.round(SHOOT_DELAY / 5);
+      default: SHOOT_DELAY;
+    }
 
     animation.showBehavior("8");
 
@@ -129,9 +134,13 @@ class Mobster extends Entity implements Combatant
     if (!isOnScreen())
       lastFire = time;
 
-    if (time - lastFire > SHOOT_DELAY)
+    if (time - lastFire > shootDelay)
     {
-      lastFire = time + Math.random() * SHOOT_DELAY * 0.25;
+      lastFire = time + Math.random() * shootDelay * 0.25;
+
+      if (Math.random() < 0.3)
+        lastFire += SHOOT_DELAY;
+
       fireWeapon();
     }
   }
