@@ -132,6 +132,7 @@ class Game extends Sprite
       var bullet = new Bullet(barrel.x, barrel.y, dir.x, dir.y);
       container.addChild(bullet);
       bullets.push(bullet);
+      twoHands.shoot(player);
     }
   }
 

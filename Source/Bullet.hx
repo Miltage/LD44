@@ -5,7 +5,7 @@ import openfl.geom.Point;
 
 class Bullet extends Sprite
 {
-  public static inline var SPEED:Float = 50;
+  public static inline var SPEED:Float = 70;
 
   private var velocity:Point;
   private var drawn:Bool;
@@ -20,8 +20,8 @@ class Bullet extends Sprite
     this.y = y;
 
     graphics.lineStyle(2, 0xFFFFFF, 1);
-    graphics.moveTo(0, -40);
-    graphics.lineTo(velocity.x, -40 + velocity.y);
+    graphics.moveTo(0, -TwoHands.GUN_HEIGHT);
+    graphics.lineTo(velocity.x, -TwoHands.GUN_HEIGHT + velocity.y);
 
     drawn = false;
   }

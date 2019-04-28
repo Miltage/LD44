@@ -119,6 +119,11 @@ class Entity extends Sprite implements Collidable
     target = new Point(tx, ty);
   }
 
+  public function push(dx:Float, dy:Float):Void
+  {
+    velocity.setTo(dx, dy);
+  }
+
   public function facePoint(px:Float, py:Float):Void
   {
     var dx = px - x;

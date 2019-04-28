@@ -15,18 +15,23 @@ class TwoHands extends Entity
 {
   public static inline var FRAME_RATE:Int = 12;
   public static inline var RADIUS:Int = 8;
-  public static inline var SPEED:Int = 300;
+  public static inline var SPEED:Int = 400;
   public static inline var SPRITE_WIDTH:Int = 32;
   public static inline var SPRITE_HEIGHT:Int = 32;
+  public static inline var GUN_HEIGHT:Int = 50;
 
   private var revolver:AnimatedSprite;
   private var tommy:AnimatedSprite;
+  private var muzzleFlash:Sprite;
+
+  private var shooting:Bool;
 
   public function new()
   {
     super();
 
     faceMoving = false;
+    shooting = false;
 
     {
       var bitmapData:BitmapData = Assets.getBitmapData("assets/revolver.png");
@@ -67,6 +72,12 @@ class TwoHands extends Entity
       tommy.scaleX = tommy.scaleY = Main.SCALE;
       addChild(tommy);
     }
+
+    muzzleFlash = new Sprite();
+    muzzleFlash.graphics.beginFill(0xFFFFFF, 1);
+    muzzleFlash.graphics.drawCircle(0, 0, 20);
+    muzzleFlash.visible = false;
+    addChild(muzzleFlash);
   }
 
   override public function update(delta:Int):Void
@@ -94,6 +105,23 @@ class TwoHands extends Entity
 
     revolver.visible = Main.getGameInstance().getCurrentWeapon() == REVOLVER;
     tommy.visible = Main.getGameInstance().getCurrentWeapon() == TOMMY;
+
+    muzzleFlash.visible = shooting;
+
+    if (shooting)
+      shooting = false;
+  }
+
+  public function shoot(player:Player):Void
+  {
+    var barrel = getShootPosition();
+    muzzleFlash.x = barrel.x - x;
+    muzzleFlash.y = barrel.y - y - GUN_HEIGHT;
+    shooting = true;
+
+    velocity.x = -facing.x * 160;
+    velocity.y = -facing.y * 160;
+    player.push(velocity.x/2, velocity.y/2);
   }
 
   public function getShootPosition():Point
