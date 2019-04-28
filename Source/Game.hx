@@ -28,8 +28,8 @@ class Game extends Sprite
   private var twoHands:TwoHands;
   private var entities:Array<Entity>;
   private var objects:Array<Interactable>;
+  private var bullets:Array<Bullet>;
   private var worldBBs:Array<BB>;
-  private var navMesh:NavMesh;
 
   private var container:Sprite;
   private var debug:Sprite;
@@ -59,7 +59,7 @@ class Game extends Sprite
 
     entities = new Array<Entity>();
     objects = new Array<Interactable>();
-    navMesh = new NavMesh();
+    bullets = new Array<Bullet>();
 
     container = new Sprite();
     addChild(container);
@@ -124,6 +124,15 @@ class Game extends Sprite
   {
     var xx = mx - container.x;
     var yy = my - container.y;
+
+    if (weapon != NONE)
+    {
+      var barrel = twoHands.getShootPosition();
+      var dir = twoHands.getFacingDirection();
+      var bullet = new Bullet(barrel.x, barrel.y, dir.x, dir.y);
+      container.addChild(bullet);
+      bullets.push(bullet);
+    }
   }
 
   public function update():Void
@@ -149,12 +158,6 @@ class Game extends Sprite
     }
 
     tooltip.visible = false;
-
-    for (entity in entities)
-      entity.update(delta);
-
-    for (object in objects)
-      object.handleCursor(mouseX, mouseY, tooltip);
 
     // keep hands at player's sides
     var left = player.getOffset(-60, 30);
@@ -200,6 +203,15 @@ class Game extends Sprite
 
     tooltip.x = mouseX;
     tooltip.y = mouseY;
+
+    for (entity in entities)
+      entity.update(delta);
+
+    for (object in objects)
+      object.handleCursor(mouseX, mouseY, tooltip);
+
+    for (bullet in bullets)
+      bullet.update(delta);
   }
 
   public function getBBs(bounds:BB):Array<BB>
@@ -236,18 +248,6 @@ class Game extends Sprite
     for (bb in getBBs(new BB(null, 0, 0, sw * Main.SCALE, sh * Main.SCALE)))
     {
       debug.graphics.drawRect(bb.x0, bb.y0, bb.x1 - bb.x0, bb.y1 - bb.y0);
-    }
-
-    // draw nav mesh
-    debug.graphics.lineStyle(1, 0xff0000, 1);
-    for (node in navMesh.getNodes())
-    {
-      debug.graphics.drawEllipse(node.x - 3, node.y - 1.5, 6, 3);
-      for (n in node.neighbours)
-      {
-        debug.graphics.moveTo(node.x, node.y);
-        debug.graphics.lineTo(n.x, n.y);
-      }
     }
   }
 }

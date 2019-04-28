@@ -59,7 +59,7 @@ class Entity extends Sprite implements Collidable
       var dy = target.y - y;
       var dist = Math.sqrt(dx*dx + dy*dy);
 
-      if (dist <= speed)
+      if (dist <= radius)
       {
         targetVelocity.setTo(0, 0);
         target = null;
@@ -67,7 +67,7 @@ class Entity extends Sprite implements Collidable
       else
       {
         targetVelocity.setTo(dx, dy);
-        targetVelocity.normalize(Math.min(dist, speed));
+        targetVelocity.normalize(speed);
       }
     }
     else
@@ -90,8 +90,8 @@ class Entity extends Sprite implements Collidable
     else
       velocity.copyFrom(targetVelocity);
 
-    x += velocity.x;
-    y += velocity.y;
+    x += velocity.x / delta;
+    y += velocity.y / delta;
 
     if (velocity.length > 0.05 && faceMoving)
     {
@@ -193,6 +193,11 @@ class Entity extends Sprite implements Collidable
       case DOWN_LEFT: new Point(-0.7, 0.7);
       case DOWN_RIGHT: new Point(0.7, 0.7);
     }
+  }
+
+  public function getFacingDirection():Point
+  {
+    return facing;
   }
 
   public function getOffset(angle:Float, dist:Float):Point

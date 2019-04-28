@@ -15,7 +15,7 @@ class TwoHands extends Entity
 {
   public static inline var FRAME_RATE:Int = 12;
   public static inline var RADIUS:Int = 8;
-  public static inline var SPEED:Int = 10;
+  public static inline var SPEED:Int = 300;
   public static inline var SPRITE_WIDTH:Int = 32;
   public static inline var SPRITE_HEIGHT:Int = 32;
 
@@ -94,5 +94,14 @@ class TwoHands extends Entity
 
     revolver.visible = Main.getGameInstance().getCurrentWeapon() == REVOLVER;
     tommy.visible = Main.getGameInstance().getCurrentWeapon() == TOMMY;
+  }
+
+  public function getShootPosition():Point
+  {
+    var offset = switch (Main.getGameInstance().getCurrentWeapon()) {
+      case REVOLVER: 20;
+      default: 0;
+    }
+    return new Point(x + offset * facing.x, y + offset * facing.y);
   }
 }
