@@ -244,4 +244,11 @@ class Entity extends Sprite implements Collidable
   {
 
   }
+
+  public function isOnScreen():Bool
+  {
+    var radius = Reflect.field(Type.getClass(this), "RADIUS");
+
+    return x + radius > 0 && y + radius > 0 && x - radius < Lib.current.stage.stageWidth && y - radius < Lib.current.stage.stageHeight;
+  }
 }

@@ -22,7 +22,7 @@ class Bullet extends Sprite
     this.y = y;
     this.origin = origin;
 
-    graphics.lineStyle(2, 0xFFFFFF, 1);
+    graphics.lineStyle(4, 0xFFFFFF, 1);
     graphics.moveTo(0, -TwoHands.GUN_HEIGHT);
     graphics.lineTo(velocity.x, -TwoHands.GUN_HEIGHT + velocity.y);
 
@@ -46,6 +46,7 @@ class Bullet extends Sprite
   {
     for (entity in entities)
     {
+      if (Std.is(entity, Hand) || Std.is(entity, TwoHands)) continue;
       if (entity == origin || entity == cast origin.getOwner()) continue;
 
       var dx = entity.x - x;
@@ -57,6 +58,7 @@ class Bullet extends Sprite
       {
         entity.takeDamage(1);
         flagged = true;
+        return;
       }
     }
   }

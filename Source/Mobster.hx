@@ -125,6 +125,10 @@ class Mobster extends Entity implements Combatant
     facePoint(player.x, player.y);
 
     var time = Lib.getTimer();
+
+    if (!isOnScreen())
+      lastFire = time;
+
     if (time - lastFire > SHOOT_DELAY)
     {
       lastFire = time + Math.random() * SHOOT_DELAY * 0.25;
@@ -135,6 +139,11 @@ class Mobster extends Entity implements Combatant
   public function setHands(h:TwoHands):Void
   {
     hands = h;
+  }
+
+  public function getHands():TwoHands
+  {
+    return hands;
   }
 
   private function fireWeapon():Void

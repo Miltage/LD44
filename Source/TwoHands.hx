@@ -147,7 +147,7 @@ class TwoHands extends Entity
     if (owner == null) return new Point(0, 0);
 
     var offset = switch (owner.getWeapon()) {
-      case REVOLVER: 20;
+      case REVOLVER: 25;
       case TOMMY: 30;
       default: 0;
     }

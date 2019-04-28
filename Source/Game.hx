@@ -13,6 +13,7 @@ import Player;
 class Game extends Sprite
 {
   public static inline var SHADOW_ALPHA:Float = 0.2;
+  public static inline var SPAWN_DELAY:Float = 2500;
 
   private var input:InputController;
   private var player:Player;
@@ -31,6 +32,7 @@ class Game extends Sprite
   private var tooltip:Tooltip;
 
   private var lastTime:Int;
+  private var lastSpawn:Int;
 
   public function new(input:InputController)
   {
@@ -120,24 +122,7 @@ class Game extends Sprite
       twoHands.setOwner(player);
     }
 
-    {
-      for (i in 0...10)
-      {
-        var mobster = new Mobster();
-        mobster.x = 800;
-        mobster.y = 440;
-        container.addChild(mobster);
-        entities.push(mobster);
-        mobsters.push(mobster);
-
-        var hands = new TwoHands();
-        hands.setOwner(mobster);
-        container.addChild(hands);
-        entities.push(hands);
-
-        mobster.setHands(hands);
-      }
-    }
+    lastSpawn = SPAWN_DELAY;
   }
 
   public function onClick(mx:Float, my:Float):Void
@@ -161,11 +146,45 @@ class Game extends Sprite
     origin.shoot();
   }
 
+  public function spawnMobster():Void
+  {
+    var sw = Lib.current.stage.stageWidth;
+    var sh = Lib.current.stage.stageHeight;
+
+    var d = 1000;
+    var angle = Math.random() * 180;
+    var rads = angle / 180 * Math.PI;
+    var mx = Math.cos(rads);
+    var my = Math.sin(rads);
+
+    var mobster = new Mobster();
+    mobster.x = sw / 2 + mx * d;
+    mobster.y = sh / 2 + my * d;
+    container.addChild(mobster);
+    entities.push(mobster);
+    mobsters.push(mobster);
+
+    var hands = new TwoHands();
+    hands.setOwner(mobster);
+    hands.x = mobster.x;
+    hands.y = mobster.y;
+    container.addChild(hands);
+    entities.push(hands);
+
+    mobster.setHands(hands);
+  }
+
   public function update():Void
   {
     var time = Lib.getTimer();
     var delta = time - lastTime;
     lastTime = time;
+
+    if (time - lastSpawn > SPAWN_DELAY)
+    {
+      spawnMobster();
+      lastSpawn = time + SPAWN_DELAY + Math.round(Math.random() * SPAWN_DELAY * 0.25);
+    }
 
     var sw = Lib.current.stage.stageWidth;
     var sh = Lib.current.stage.stageHeight;
@@ -260,6 +279,9 @@ class Game extends Sprite
         container.removeChild(mobster);
         entities.remove(mobster);
         mobsters.remove(mobster);
+
+        entities.remove(mobster.getHands());
+        container.removeChild(mobster.getHands());
       }
     }
   }
