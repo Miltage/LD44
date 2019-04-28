@@ -10,6 +10,13 @@ import openfl.Assets;
 import Entity;
 import Player;
 
+enum WeaponType
+{
+  NONE;
+  REVOLVER;
+  TOMMY;
+}
+
 class Game extends Sprite
 {
   public static inline var SHADOW_ALPHA:Float = 0.2;
@@ -29,6 +36,7 @@ class Game extends Sprite
   private var tooltip:Tooltip;
 
   private var lastTime:Int;
+  private var weapon:WeaponType;
 
   public function new(input:InputController)
   {
@@ -58,6 +66,8 @@ class Game extends Sprite
 
     tooltip = new Tooltip();
     addChild(tooltip);
+
+    weapon = REVOLVER;
 
     var sw = Lib.current.stage.stageWidth;
     var sh = Lib.current.stage.stageHeight;
@@ -151,8 +161,22 @@ class Game extends Sprite
     leftHand.setTarget(left.x, left.y);
     var right = player.getOffset(60, 30);
     rightHand.setTarget(right.x, right.y);
-    var front = player.getOffset(0, 40);
+    var front = player.getOffset(0, 45);
     twoHands.setTarget(front.x, front.y);
+
+    // show correct weapon
+    leftHand.visible = weapon == NONE;
+    rightHand.visible = weapon == NONE;
+    twoHands.visible = weapon != NONE;
+
+    if (weapon != NONE)
+    {
+      player.setFaceMoving(false);
+      player.facePoint(mouseX, mouseY);
+      twoHands.facePoint(mouseX, mouseY);
+    }
+    else
+      player.setFaceMoving(true);
 
     // player movement
     if (input.isKeyDown('W'.code) && input.isKeyDown('A'.code))
@@ -195,6 +219,11 @@ class Game extends Sprite
     }*/
 
     return list;
+  }
+
+  public function getCurrentWeapon():WeaponType
+  {
+    return weapon;
   }
 
   private function drawDebug():Void

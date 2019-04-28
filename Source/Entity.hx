@@ -25,6 +25,7 @@ class Entity extends Sprite implements Collidable
   private var facing:Point;
   private var target:Point;
   private var path:Array<Point>;
+  private var faceMoving:Bool;
 
   public function new()
   {
@@ -39,6 +40,7 @@ class Entity extends Sprite implements Collidable
     velocity = new Point();
     targetVelocity = new Point();
     facing = new Point(0, 1);
+    faceMoving = true;
   }
 
   public function update(delta:Int):Void
@@ -91,7 +93,7 @@ class Entity extends Sprite implements Collidable
     x += velocity.x;
     y += velocity.y;
 
-    if (velocity.length > 0.05)
+    if (velocity.length > 0.05 && faceMoving)
     {
       var dfx = facing.x - velocity.x;
       var dfy = facing.y - velocity.y;
@@ -99,6 +101,11 @@ class Entity extends Sprite implements Collidable
       facing.y -= dfy * 0.2;
       facing.normalize(1);
     }
+  }
+
+  public function setFaceMoving(fm:Bool):Void
+  {
+    faceMoving = fm;
   }
 
   public function setPath(path:Array<Point>):Void
@@ -110,6 +117,14 @@ class Entity extends Sprite implements Collidable
   public function setTarget(tx:Float, ty:Float)
   {
     target = new Point(tx, ty);
+  }
+
+  public function facePoint(px:Float, py:Float):Void
+  {
+    var dx = px - x;
+    var dy = py - y;
+    facing = new Point(dx, dy);
+    facing.normalize(1);
   }
 
   public function moveToward(entity:Entity):Void
