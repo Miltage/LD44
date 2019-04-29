@@ -39,7 +39,8 @@ class Main extends Sprite
     stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
     stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
     stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-    stage.addEventListener(MouseEvent.CLICK, onClick);
+    stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+    stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
   }
 
   private function onKeyDown(e:KeyboardEvent):Void
@@ -61,9 +62,14 @@ class Main extends Sprite
     input.onKeyUp(keyCode);
   }
 
-  private function onClick(e:MouseEvent):Void
+  private function onMouseDown(e:MouseEvent):Void
   {
-    game.onClick(mouseX, mouseY);
+    game.onMouseDown(mouseX, mouseY);
+  }
+
+  private function onMouseUp(e:MouseEvent):Void
+  {
+    game.onMouseUp(mouseX, mouseY);
   }
 
   private function onEnterFrame(e:Event):Void

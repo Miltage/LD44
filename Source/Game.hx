@@ -37,7 +37,9 @@ class Game extends Sprite
   private var lastTime:Int;
   private var lastClick:Int;
   private var lastSpawn:Int;
+  private var lastFire:Int;
   private var gameTime:Int;
+  private var mousePressed:Bool;
 
   public function new(input:InputController)
   {
@@ -141,18 +143,40 @@ class Game extends Sprite
 
     lastSpawn = Math.round(SPAWN_DELAY / 2);
     lastClick = 0;
+    lastFire = 0;
+    mousePressed = false;
   }
 
-  public function onClick(mx:Float, my:Float):Void
+  public function onMouseUp(mx:Float, my:Float):Void
   {
     var xx = mx - container.x;
     var yy = my - container.y;
-    lastClick = Lib.getTimer();
+    var time = Lib.getTimer();
+    lastClick = time;
 
+    mousePressed = false;
+  }
+
+  public function onMouseDown(mx:Float, my:Float):Void
+  {
+    mousePressed = true;
+  }
+
+  public function doAction():Void
+  {
     if (player.isDead()) return;
 
-    if (player.getWeapon() != NONE)
+    var time = Lib.getTimer();
+    var fireDelay = switch (player.getWeapon())
     {
+      case TOMMY: 140;
+      case REVOLVER: 500;
+      case NONE: 0;
+    };
+
+    if (player.getWeapon() != NONE && time - lastFire > fireDelay)
+    {
+      lastFire = time;
       twoHands.shoot();
     }
   }
@@ -255,6 +279,9 @@ class Game extends Sprite
     }
 
     gameTime -= delta;
+
+    if (mousePressed)
+      doAction();
 
     if (time - lastSpawn > SPAWN_DELAY)
     {
