@@ -73,9 +73,20 @@ class Mobster extends Entity implements Combatant
     deathCount = 0;
     deathTimer = 0;
     hp = 2;
-    weapon = Math.random() > .5 ? REVOLVER : TOMMY;
+
+    var gameTime = Main.getGameInstance().getGameTime() / 1000;
+
+    weapon = Math.random() > .9 ? REVOLVER : TOMMY;
+
+    if (gameTime < 90) weapon = Math.random() > .5 ? REVOLVER : TOMMY;
+
+    if (gameTime < 60) weapon = Math.random() > .5 ? REVOLVER : (Math.random() > .5 ? TOMMY : SHOTGUN);
+
+    weapon = Math.random() > .05 ? weapon : SHOTGUN;
+
     shootDelay = switch (weapon) {
       case TOMMY: Math.round(SHOOT_DELAY / 5);
+      case SHOTGUN: Math.round(SHOOT_DELAY * 1.5);
       default: SHOOT_DELAY;
     }
 

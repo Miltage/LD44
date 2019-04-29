@@ -39,6 +39,7 @@ class Game extends Sprite
   private var lastTime:Int;
   private var lastClick:Int;
   private var lastSpawn:Int;
+  private var spawnDelay:Float;
   private var lastFire:Int;
   private var gameTime:Int;
   private var mousePressed:Bool;
@@ -56,6 +57,11 @@ class Game extends Sprite
   {
     removeChild(container);
     init();
+  }
+
+  public function getGameTime():Int
+  {
+    return gameTime;
   }
 
   public function init():Void
@@ -159,6 +165,7 @@ class Game extends Sprite
     }
 
     lastSpawn = Math.round(SPAWN_DELAY / 2);
+    spawnDelay = SPAWN_DELAY;
     lastClick = 0;
     lastFire = 0;
     mousePressed = false;
@@ -319,10 +326,10 @@ class Game extends Sprite
     if (mousePressed)
       doAction();
 
-    if (time - lastSpawn > SPAWN_DELAY)
+    if (time - lastSpawn > spawnDelay)
     {
       spawnMobster();
-      lastSpawn = time + SPAWN_DELAY + Math.round(Math.random() * SPAWN_DELAY * 0.25);
+      lastSpawn = time;
     }
 
     var sw = Lib.current.stage.stageWidth;
