@@ -61,6 +61,7 @@ class WeaponDebrisRevolver extends Debris implements Interactable
     highlight.alpha = 1;
     container.addChild(highlight);
 
+    lifeSpan = 400;
     ammo = 0;
   }
 

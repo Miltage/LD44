@@ -42,7 +42,7 @@ class Debris extends Sprite
     setHeight(30);
 
     lifetime = 0;
-    lifeSpan = 400;
+    lifeSpan = 200;
 
     init();
   }

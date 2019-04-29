@@ -36,7 +36,7 @@ class TwoHands extends Entity
     shooting = false;
 
     {
-      var bitmapData:BitmapData = Assets.getBitmapData("assets/revolver.png");
+      var bitmapData:BitmapData = Assets.getBitmapData("assets/revolver2.png");
       var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 8, 1, SPRITE_WIDTH, SPRITE_HEIGHT);
 
       spritesheet.addBehavior(new BehaviorData("0", [0], true, FRAME_RATE));
@@ -56,7 +56,7 @@ class TwoHands extends Entity
     }
 
     {
-      var bitmapData:BitmapData = Assets.getBitmapData("assets/tommy.png");
+      var bitmapData:BitmapData = Assets.getBitmapData("assets/tommy2.png");
       var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 8, 1, SPRITE_WIDTH, SPRITE_HEIGHT);
 
       spritesheet.addBehavior(new BehaviorData("0", [0], true, FRAME_RATE));
@@ -185,7 +185,7 @@ class TwoHands extends Entity
   override public function getFacingDirection():Point
   {
     var deviation = switch (owner.getWeapon()) {
-      case TOMMY: 1;
+      case TOMMY: 0.6;
       case REVOLVER: 0.25;
       case NONE: 0;
     };

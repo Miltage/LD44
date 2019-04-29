@@ -126,8 +126,8 @@ class Mobster extends Entity implements Combatant
         deathTimer = 0;
       }
 
-      visible = deathCount < 24 || deathCount % 2 == 0;
-      flagged = deathCount > 30;
+      visible = deathCount < 40 || deathCount % 2 == 0;
+      flagged = deathCount > 50;
 
       return;
     }

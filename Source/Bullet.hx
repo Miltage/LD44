@@ -49,6 +49,8 @@ class Bullet extends Sprite
       if (Std.is(entity, Hand) || Std.is(entity, TwoHands)) continue;
       if (entity == origin || entity == cast origin.getOwner()) continue;
 
+      if (Std.is(entity, Mobster) && cast(entity, Mobster).isDead()) continue;
+
       var dx = entity.x - x;
       var dy = entity.y - y;
       var dist = Math.sqrt(dy*dx + dy*dy);

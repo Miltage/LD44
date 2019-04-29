@@ -13,7 +13,7 @@ import Player;
 class Game extends Sprite
 {
   public static inline var SHADOW_ALPHA:Float = 0.2;
-  public static inline var SPAWN_DELAY:Float = 2500;
+  public static inline var SPAWN_DELAY:Float = 5000;
 
   private var input:InputController;
   private var player:Player;
@@ -383,11 +383,6 @@ class Game extends Sprite
       if (bounds.intersectsBB(bb))
         list.push(bb);
     }
-
-    /*for(e in extras){
-      if(bounds.intersectsBB(e.getBB()))
-        list.push(e.getBB());
-    }*/
 
     return list;
   }
