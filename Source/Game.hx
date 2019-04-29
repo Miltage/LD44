@@ -30,6 +30,7 @@ class Game extends Sprite
   private var container:Sprite;
   private var flashSprite:Sprite;
   private var deathSprite:Sprite;
+  private var winSprite:Sprite;
   private var debug:Sprite;
   private var tooltip:Tooltip;
   private var ui:UI;
@@ -44,6 +45,8 @@ class Game extends Sprite
   private var gameTime:Int;
   private var mousePressed:Bool;
   private var initialized:Bool;
+  private var playing:Bool;
+  private var win:Bool;
 
   public function new(input:InputController)
   {
@@ -51,13 +54,12 @@ class Game extends Sprite
 
     this.input = input;
 
-    lastTime = Lib.getTimer();
     initialized = false;
   }
 
   public function reset():Void
   {
-    removeChild(container);
+    unset();
     init();
   }
 
@@ -66,11 +68,35 @@ class Game extends Sprite
     return gameTime;
   }
 
+  public function isInitialized():Bool
+  {
+    return initialized;
+  }
+
+  public function unset():Void
+  {
+    removeChild(container);
+    initialized = false;
+  }
+
+  public function isPlaying():Bool
+  {
+    return playing;
+  }
+
+  public function isWin():Bool
+  {
+    return win;
+  }
+
   public function init():Void
   {
     initialized = true;
+    win = false;
+    playing = true;
     worldBBs = new Array<BB>();
 
+    lastTime = Lib.getTimer();
     gameTime = 120 * 1000;
 
     entities = new Array<Entity>();
@@ -96,6 +122,12 @@ class Game extends Sprite
     deathSprite.graphics.drawRect(0, 0, sw, sh);
     deathSprite.visible = false;
     addChild(deathSprite);
+
+    winSprite = new Sprite();
+    winSprite.graphics.beginFill(0x0000FF, 0.4);
+    winSprite.graphics.drawRect(0, 0, sw, sh);
+    winSprite.visible = false;
+    addChild(winSprite);
 
     flashSprite = new Sprite();
     flashSprite.graphics.beginFill(0xFFFFFF, 0.8);
@@ -201,13 +233,15 @@ class Game extends Sprite
     lastClick = time;
 
     mousePressed = false;
+
+    player.takeDamage(2, 0, 0);
   }
 
   public function onMouseDown(mx:Float, my:Float):Void
   {
     if (!initialized)
       return;
-    
+
     mousePressed = true;
   }
 
@@ -315,7 +349,7 @@ class Game extends Sprite
 
   public function update():Void
   {
-    if (!initialized)
+    if (!initialized || !playing)
       return;
 
     var time = Lib.getTimer();
@@ -330,10 +364,20 @@ class Game extends Sprite
     if (player.isDead())
     {
       deathSprite.visible = true;
+      playing = false;
       return;
     }
 
     gameTime -= delta;
+
+    win = gameTime <= 0;
+
+    if (win)
+    {
+      winSprite.visible = true;
+      playing = false;
+      return;
+    }
 
     if (mousePressed)
       doAction();
