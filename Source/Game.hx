@@ -34,6 +34,7 @@ class Game extends Sprite
   private var ui:UI;
 
   private var lastTime:Int;
+  private var lastClick:Int;
   private var lastSpawn:Int;
   private var gameTime:Int;
 
@@ -132,12 +133,14 @@ class Game extends Sprite
     }
 
     lastSpawn = SPAWN_DELAY;
+    lastClick = 0;
   }
 
   public function onClick(mx:Float, my:Float):Void
   {
     var xx = mx - container.x;
     var yy = my - container.y;
+    lastClick = Lib.getTimer();
 
     if (player.getWeapon() != NONE)
     {
@@ -371,6 +374,11 @@ class Game extends Sprite
     ui.setTime(Math.floor(gameTime/1000));
     ui.setAmmo(twoHands.getAmmo());
     ui.setAmmoVisible(player.getWeapon() != NONE);
+
+    if (player.getWeapon() != NONE && twoHands.getAmmo() <= 0 && time - lastClick < 1000)
+    {
+      tooltip.setText("Out of ammo");
+    }
   }
 
   public function getBBs(bounds:BB):Array<BB>
