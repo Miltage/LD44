@@ -16,6 +16,7 @@ class Main extends Sprite
   public static inline var BG_COLOR:UInt = 0x342f38;
 
   private static var game:Game;
+  private static var soundManager:SoundManager;
 
   private var input:InputController;
   
@@ -27,6 +28,9 @@ class Main extends Sprite
 
     var sw = Lib.current.stage.stageWidth;
     var sh = Lib.current.stage.stageHeight;
+
+    soundManager = new SoundManager(0.5);
+    soundManager.loop("assets/mafia.ogg");
 
     game = new Game(input);
     game.graphics.beginFill(BG_COLOR, 1);
