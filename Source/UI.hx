@@ -73,7 +73,7 @@ class UI extends Sprite
 
   public function setTime(seconds:Int):Void
   {
-    tx.text = Math.floor(seconds/60) + ":" + (seconds < 10 ? "0" : "") + seconds % 60;
+    tx.text = Math.floor(seconds/60) + ":" + (seconds % 60 < 10 ? "0" : "") + seconds % 60;
   }
 
   public function setAmmo(ammo:Int):Void
