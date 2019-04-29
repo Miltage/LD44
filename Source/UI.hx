@@ -65,7 +65,7 @@ class UI extends Sprite
     hp = new AnimatedSprite(spritesheet, true);
     hp.scaleX = hp.scaleY = Main.SCALE;
     addChild(hp);
-    hp.y = 15;
+    hp.y = 12;
     hp.x = sw/2 - 96/2;
 
     setHealthPercent(40);

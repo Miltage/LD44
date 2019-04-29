@@ -34,6 +34,7 @@ class Game extends Sprite
   private var tooltip:Tooltip;
   private var ui:UI;
   private var wallBMD:BitmapData;
+  private var window:Bitmap;
 
   private var lastTime:Int;
   private var lastClick:Int;
@@ -105,6 +106,14 @@ class Game extends Sprite
       var b = new Bitmap(wallBMD);
       container.addChild(b);
       b.scaleX = b.scaleY = Main.SCALE;
+
+      var bitmapData:BitmapData = Assets.getBitmapData("assets/brokenwindow.png");
+      window = new Bitmap(bitmapData);
+      container.addChild(window);
+      window.x = 296 * Main.SCALE;
+      window.y = 80 * Main.SCALE;
+      window.scaleX = window.scaleY = Main.SCALE;
+      window.visible = false;
     }
 
     #if debug
@@ -161,6 +170,14 @@ class Game extends Sprite
       for (j in 0...4)
           if (i > 0 && i < 3 || j > 0 && j < 3)
             wallBMD.setPixel32(Std.int(x/2) + i, Std.int(y/2) + j, ((i == 1 || i == 2) && (j == 1 || j == 2) ? 0xFF111111 : 0xFFAAAAAA));
+
+    if (x > window.x && x < window.x + window.width && y > window.y && y < window.y + window.height && !window.visible)
+    {
+      for (i in 0...20)
+        addDebris(window.x + Math.random() * window.width, window.y + Math.random() * window.height, ShardDebris);
+
+      window.visible = true;
+    }
   }
 
   public function onMouseUp(mx:Float, my:Float):Void
