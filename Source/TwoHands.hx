@@ -26,6 +26,7 @@ class TwoHands extends Entity
   private var owner:Combatant;
 
   private var shooting:Bool;
+  private var ammo:Int;
 
   public function new()
   {
@@ -89,6 +90,7 @@ class TwoHands extends Entity
   public function setOwner(c:Combatant):Void
   {
     owner = c;
+    ammo = getTotalAmmo();
   }
 
   override public function update(delta:Int):Void
@@ -130,8 +132,27 @@ class TwoHands extends Entity
     }
   }
 
+  public function getAmmo():Int
+  {
+    return ammo;
+  }
+
+  public function getTotalAmmo():Int
+  {
+    return switch (owner.getWeapon()) {
+      case REVOLVER: 6;
+      case TOMMY: 30;
+      default: 0;
+    }
+  }
+
   public function shoot():Void
   {
+    if (ammo <= 0)
+      return;
+    else
+      ammo--;
+
     var barrel = getShootPosition();
     muzzleFlash.x = barrel.x - x;
     muzzleFlash.y = barrel.y - y - GUN_HEIGHT;
@@ -140,6 +161,8 @@ class TwoHands extends Entity
     velocity.x = -facing.x * 160;
     velocity.y = -facing.y * 160;
     owner.push(velocity.x/2, velocity.y/2);
+
+    Main.getGameInstance().addBullet(this);
   }
 
   public function getShootPosition():Point

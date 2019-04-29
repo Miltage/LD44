@@ -132,7 +132,7 @@ class Game extends Sprite
 
     if (player.getWeapon() != NONE)
     {
-      addBullet(twoHands);
+      twoHands.shoot();
     }
   }
 
@@ -143,7 +143,6 @@ class Game extends Sprite
     var bullet = new Bullet(origin, barrel.x, barrel.y, dir.x, dir.y);
     container.addChild(bullet);
     bullets.push(bullet);
-    origin.shoot();
   }
 
   public function spawnMobster():Void

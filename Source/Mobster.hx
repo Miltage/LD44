@@ -160,7 +160,7 @@ class Mobster extends Entity implements Combatant
     if (hands == null)
       return;
 
-    Main.getGameInstance().addBullet(hands);
+    hands.shoot();
   }
 
   override public function collidesWith(entity:Entity):Bool
