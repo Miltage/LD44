@@ -275,12 +275,15 @@ class Game extends Sprite
     {
       if (mobster.isDead())
       {
+        entities.remove(mobster.getHands());
+        container.removeChild(mobster.getHands());
+      }
+
+      if (mobster.flaggedForRemoval())
+      {
         container.removeChild(mobster);
         entities.remove(mobster);
         mobsters.remove(mobster);
-
-        entities.remove(mobster.getHands());
-        container.removeChild(mobster.getHands());
       }
     }
   }

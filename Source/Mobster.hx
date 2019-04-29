@@ -30,7 +30,10 @@ class Mobster extends Entity implements Combatant
   private var lastFire:Float;
   private var hands:TwoHands;
   private var hp:Int;
+  private var flagged:Bool;
   private var shootDelay:Int;
+  private var deathCount:Int;
+  private var deathTimer:Int;
 
   public function new()
   {
@@ -65,8 +68,11 @@ class Mobster extends Entity implements Combatant
     }
 
     faceMoving = false;
+    flagged = false;
     lastFire = 0;
-    hp = 4;
+    deathCount = 0;
+    deathTimer = 0;
+    hp = 2;
     weapon = Math.random() > .5 ? REVOLVER : TOMMY;
     shootDelay = switch (weapon) {
       case TOMMY: Math.round(SHOOT_DELAY / 5);
@@ -101,6 +107,31 @@ class Mobster extends Entity implements Combatant
 
   override public function update(delta:Int):Void
   {
+
+    animation.update(delta);
+
+    var time = Lib.getTimer();
+
+    if (isDead())
+    {
+      deathTimer += delta;
+      targetVelocity.setTo(0, 0);
+      velocity.setTo(0, 0);
+      rotation = facing.x > 0 ? -90 : 90;
+      animation.showBehavior(facing.x > 0 ? "6" : "10");
+
+      if (deathTimer > 100)
+      {
+        deathCount++;
+        deathTimer = 0;
+      }
+
+      visible = deathCount < 24 || deathCount % 2 == 0;
+      flagged = deathCount > 30;
+
+      return;
+    }
+
     super.update(delta);
 
     var sw = Lib.current.stage.stageWidth;
@@ -114,8 +145,6 @@ class Mobster extends Entity implements Combatant
 
     animation.showBehavior("" + frame);
 
-    animation.update(delta);
-
     var player = Main.getGameInstance().getPlayer();
 
     var dx = player.x - x;
@@ -128,8 +157,6 @@ class Mobster extends Entity implements Combatant
     }
 
     facePoint(player.x, player.y);
-
-    var time = Lib.getTimer();
 
     if (!isOnScreen())
       lastFire = time;
@@ -184,13 +211,21 @@ class Mobster extends Entity implements Combatant
     target = new Point(player.x + mx * fightDistance, player.y + my * fightDistance);
   }
 
-  override public function takeDamage(amount:Int):Void
+  override public function takeDamage(amount:Int, fx:Float, fy:Float):Void
   {
     hp -= amount;
+
+    velocity.x = fx * 2;
+    velocity.y = fy * 2;
   }
 
   public function isDead():Bool
   {
     return hp <= 0;
+  }
+
+  public function flaggedForRemoval():Bool
+  {
+    return flagged;
   }
 }

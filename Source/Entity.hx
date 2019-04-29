@@ -240,7 +240,7 @@ class Entity extends Sprite implements Collidable
     return new Point(x + mx * dist, y + my * dist);
   }
 
-  public function takeDamage(amount:Int):Void
+  public function takeDamage(amount:Int, fx:Float, fy:Float):Void
   {
 
   }

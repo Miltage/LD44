@@ -56,7 +56,7 @@ class Bullet extends Sprite
 
       if (dist < radius)
       {
-        entity.takeDamage(1);
+        entity.takeDamage(1, velocity.x, velocity.y);
         flagged = true;
         return;
       }

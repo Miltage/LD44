@@ -107,7 +107,7 @@ class Player extends Entity implements Combatant
     return Std.is(entity, Mobster);
   }
 
-  override public function takeDamage(amount:Int):Void
+  override public function takeDamage(amount:Int, fx:Float, fy:Float):Void
   {
     Main.getGameInstance().flash();
   }
