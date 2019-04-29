@@ -168,6 +168,7 @@ class TwoHands extends Entity
     owner.push(velocity.x/2, velocity.y/2);
 
     Main.getGameInstance().addBullet(this);
+    Main.getGameInstance().addDebris(x, y, ShellDebris);
   }
 
   public function getShootPosition():Point

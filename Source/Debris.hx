@@ -26,14 +26,12 @@ class Debris extends Sprite
   private var lifetime:Int;
   private var lifeSpan:Int;
   private var radius:Int;
+  private var shadowRadius:Int;
+  private var flashesOnDespawn:Bool;
 
   public function new()
   {
     super();
-
-    graphics.beginFill(0, 0.7);
-    var s = 20;
-    graphics.drawEllipse(-s/2, -s/4, s, s/2);
 
     container = new Sprite();
     addChild(container);
@@ -46,8 +44,13 @@ class Debris extends Sprite
     lifetime = 0;
     lifeSpan = 200;
     radius = RADIUS;
+    shadowRadius = RADIUS;
+    flashesOnDespawn = true;
 
     init();
+
+    graphics.beginFill(0, 0.7);
+    graphics.drawEllipse(-shadowRadius/2, -shadowRadius/4, shadowRadius, shadowRadius/2);
   }
 
   public function setHeight(z:Int):Void
@@ -134,7 +137,7 @@ class Debris extends Sprite
 
     lifetime++;
 
-    visible = lifetime < lifeSpan * 0.9 || Math.sin(lifetime/2) > 0;
+    visible = !flashesOnDespawn || lifetime < lifeSpan * 0.9 || Math.sin(lifetime/2) > 0;
 
     if (lifetime >= lifeSpan)
       flagged = true;
