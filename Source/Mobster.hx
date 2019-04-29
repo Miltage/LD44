@@ -182,6 +182,11 @@ class Mobster extends Entity implements Combatant
     return hands;
   }
 
+  public function getAmmo():Int
+  {
+    return hands.getAmmo();
+  }
+
   private function fireWeapon():Void
   {
     if (hands == null)

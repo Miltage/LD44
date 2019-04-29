@@ -137,6 +137,11 @@ class TwoHands extends Entity
     return ammo;
   }
 
+  public function setAmmo(a:Int):Void
+  {
+    ammo = a;
+  }
+
   public function getTotalAmmo():Int
   {
     return switch (owner.getWeapon()) {
@@ -148,10 +153,10 @@ class TwoHands extends Entity
 
   public function shoot():Void
   {
-    /*if (ammo <= 0)
+    if (ammo <= 0)
       return;
     else
-      ammo--;*/
+      ammo--;
 
     var barrel = getShootPosition();
     muzzleFlash.x = barrel.x - x;

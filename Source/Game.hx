@@ -125,7 +125,6 @@ class Game extends Sprite
     }
 
     lastSpawn = SPAWN_DELAY;
-    addDebris(500, 500, WeaponDebrisRevolver);
   }
 
   public function onClick(mx:Float, my:Float):Void
@@ -148,14 +147,17 @@ class Game extends Sprite
     bullets.push(bullet);
   }
 
-  public function addDebris(x:Float, y:Float, c:Class<Dynamic>):Void
+  public function addDebris(x:Float, y:Float, c:Class<Dynamic>, a:Array<Dynamic> = null):Debris
   {
-    if (c == null) return;
+    if (c == null) return null;
     var d = cast(Type.createInstance(c, []), Debris);
+    if (a != null)
+      d.setArgs(a);
     d.x = x;
     d.y = y;
     container.addChild(cast d);
     debris.push(cast d);
+    return d;
   }
 
   public function spawnMobster():Void
@@ -197,8 +199,23 @@ class Game extends Sprite
           case TOMMY: WeaponDebrisTommy;
           case REVOLVER: WeaponDebrisRevolver;
           default: null;
-        });
+        }, [mobster.getAmmo()]);
     }
+  }
+
+  private function discardWeapon():Void
+  {
+    if (player.getWeapon() == NONE) return;
+
+    var gun = addDebris(player.x, player.y, switch (player.getWeapon())
+        {
+          case TOMMY: WeaponDebrisTommy;
+          case REVOLVER: WeaponDebrisRevolver;
+          default: null;
+        }, [twoHands.getAmmo()]);
+
+    gun.setVelocity(player.getFacingDirection().x * 10, player.getFacingDirection().y * 10);
+    player.setWeapon(NONE);
   }
 
   public function update():Void
@@ -276,6 +293,9 @@ class Game extends Sprite
     else
       player.stop();
 
+    if (input.isKeyPressed('E'.code))
+      discardWeapon();
+
     tooltip.x = mouseX;
     tooltip.y = mouseY;
     flashSprite.visible = false;
@@ -286,10 +306,30 @@ class Game extends Sprite
     for (deb in debris)
     {
       deb.update(delta);
+
+      if (Std.is(deb, Interactable))
+        cast(deb, Interactable).handleCursor(mouseX, mouseY, tooltip);
+
       if(deb.flaggedForRemoval())
       {
         container.removeChild(deb);
         debris.remove(deb);
+      }
+
+      if (player.getWeapon() == NONE && Std.is(deb, Interactable) && deb.isDropped())
+      {
+        var dx = player.x - deb.x;
+        var dy = player.y - deb.y;
+        var dist = Math.sqrt(dx*dx + dy*dy);
+
+        if (dist < Player.RADIUS * 2)
+        {
+          var d = cast(deb, Interactable);
+          player.setWeapon(d.getWeaponType());
+          twoHands.setAmmo(d.getAmmo());
+          deb.flag();
+          break;
+        }
       }
     }
 

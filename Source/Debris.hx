@@ -39,10 +39,27 @@ class Debris extends Sprite
     velocity = new Point(Math.random() * 10 - 5, Math.random() * 10 - 5);
     z = -5;
 
+    setHeight(30);
+
     lifetime = 0;
     lifeSpan = 400;
 
     init();
+  }
+
+  public function setHeight(z:Int):Void
+  {
+    container.y = -z;
+  }
+
+  public function setVelocity(vx:Float, vy:Float):Void
+  {
+    velocity.setTo(vx, vy);
+  }
+
+  public function setArgs(args:Array<Dynamic>):Void
+  {
+
   }
 
   private function init():Void
@@ -120,8 +137,18 @@ class Debris extends Sprite
       flagged = true;
   }
 
+  public function flag():Void
+  {
+    flagged = true;
+  }
+
   public function flaggedForRemoval():Bool
   {
     return flagged;
+  }
+
+  public function isDropped():Bool
+  {
+    return container.y >= 0;
   }
 }
