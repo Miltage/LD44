@@ -130,7 +130,7 @@ class Game extends Sprite
       player.y = 400;
       container.addChild(player);
       entities.push(player);
-      player.setWeapon(REVOLVER);
+      player.setWeapon(SHOTGUN);
     }
 
     {
@@ -204,6 +204,7 @@ class Game extends Sprite
     {
       case TOMMY: 140;
       case REVOLVER: 500;
+      case SHOTGUN: 1000;
       case NONE: 0;
     };
 
@@ -274,6 +275,7 @@ class Game extends Sprite
         {
           case TOMMY: WeaponDebrisTommy;
           case REVOLVER: WeaponDebrisRevolver;
+          case SHOTGUN: WeaponDebrisShotgun;
           default: null;
         }, [mobster.getAmmo()]);
     }
@@ -287,6 +289,7 @@ class Game extends Sprite
         {
           case TOMMY: WeaponDebrisTommy;
           case REVOLVER: WeaponDebrisRevolver;
+          case SHOTGUN: WeaponDebrisShotgun;
           default: null;
         }, [twoHands.getAmmo()]);
 

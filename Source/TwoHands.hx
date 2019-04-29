@@ -22,6 +22,7 @@ class TwoHands extends Entity
 
   private var revolver:AnimatedSprite;
   private var tommy:AnimatedSprite;
+  private var shotgun:AnimatedSprite;
   private var muzzleFlash:Sprite;
   private var owner:Combatant;
 
@@ -75,6 +76,26 @@ class TwoHands extends Entity
       addChild(tommy);
     }
 
+    {
+      var bitmapData:BitmapData = Assets.getBitmapData("assets/shotgun2.png");
+      var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 8, 1, SPRITE_WIDTH, SPRITE_HEIGHT);
+
+      spritesheet.addBehavior(new BehaviorData("0", [0], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("1", [1], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("2", [2], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("3", [3], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("4", [4], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("5", [5], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("6", [6], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("7", [7], true, FRAME_RATE));
+
+      shotgun = new AnimatedSprite(spritesheet, true);
+      shotgun.x = -SPRITE_WIDTH * Main.SCALE/2;
+      shotgun.y = -SPRITE_HEIGHT * Main.SCALE * 1.25;
+      shotgun.scaleX = shotgun.scaleY = Main.SCALE;
+      addChild(shotgun);
+    }
+
     muzzleFlash = new Sprite();
     muzzleFlash.graphics.beginFill(0xFFFFFF, 1);
     muzzleFlash.graphics.drawCircle(0, 0, 20);
@@ -118,6 +139,7 @@ class TwoHands extends Entity
       {
         case REVOLVER: revolver;
         case TOMMY: tommy;
+        case SHOTGUN: shotgun;
         default: null;
       }
 
@@ -129,6 +151,7 @@ class TwoHands extends Entity
 
       revolver.visible = owner.getWeapon() == REVOLVER;
       tommy.visible = owner.getWeapon() == TOMMY;
+      shotgun.visible = owner.getWeapon() == SHOTGUN;
     }
   }
 
@@ -147,6 +170,7 @@ class TwoHands extends Entity
     return switch (owner.getWeapon()) {
       case REVOLVER: 6;
       case TOMMY: 30;
+      case SHOTGUN: 4;
       default: 0;
     }
   }
@@ -168,6 +192,11 @@ class TwoHands extends Entity
     owner.push(velocity.x/2, velocity.y/2);
 
     Main.getGameInstance().addBullet(this);
+    if (owner.getWeapon() == SHOTGUN)
+    {
+      for (i in 0...5)
+        Main.getGameInstance().addBullet(this);
+    }
     Main.getGameInstance().addDebris(x, y, ShellDebris);
   }
 
@@ -186,6 +215,7 @@ class TwoHands extends Entity
   override public function getFacingDirection():Point
   {
     var deviation = switch (owner.getWeapon()) {
+      case SHOTGUN: 1;
       case TOMMY: 0.6;
       case REVOLVER: 0.25;
       case NONE: 0;
