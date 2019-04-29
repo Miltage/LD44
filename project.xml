@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="Coin" package="com.sample.nest" version="1.0.0" company="Robert Shenton" />
+	<meta title="Money Mafia" package="com.bitcoin" version="1.0.0" company="Robert Shenton" />
 	<app main="Main" path="Export" file="Coin" />
 
 	<window width="1280" height="720"/>

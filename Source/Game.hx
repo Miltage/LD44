@@ -43,6 +43,7 @@ class Game extends Sprite
   private var lastFire:Int;
   private var gameTime:Int;
   private var mousePressed:Bool;
+  private var initialized:Bool;
 
   public function new(input:InputController)
   {
@@ -51,6 +52,7 @@ class Game extends Sprite
     this.input = input;
 
     lastTime = Lib.getTimer();
+    initialized = false;
   }
 
   public function reset():Void
@@ -66,6 +68,7 @@ class Game extends Sprite
 
   public function init():Void
   {
+    initialized = true;
     worldBBs = new Array<BB>();
 
     gameTime = 120 * 1000;
@@ -189,6 +192,9 @@ class Game extends Sprite
 
   public function onMouseUp(mx:Float, my:Float):Void
   {
+    if (!initialized)
+      return;
+
     var xx = mx - container.x;
     var yy = my - container.y;
     var time = Lib.getTimer();
@@ -199,6 +205,9 @@ class Game extends Sprite
 
   public function onMouseDown(mx:Float, my:Float):Void
   {
+    if (!initialized)
+      return;
+    
     mousePressed = true;
   }
 
@@ -306,6 +315,9 @@ class Game extends Sprite
 
   public function update():Void
   {
+    if (!initialized)
+      return;
+
     var time = Lib.getTimer();
     var delta = time - lastTime;
     lastTime = time;

@@ -19,6 +19,8 @@ class Main extends Sprite
   private static var soundManager:SoundManager;
 
   private var input:InputController;
+  private var frame:Int;
+  private var screens:Array<Bitmap>;
   
   public function new()
   {
@@ -35,8 +37,22 @@ class Main extends Sprite
     game = new Game(input);
     game.graphics.beginFill(BG_COLOR, 1);
     game.graphics.drawRect(0, 0, sw, sh);
-    game.init();
-    addChild(game);
+
+    frame = 0;
+    screens = new Array<Bitmap>();
+
+    var assets = ["screen1.png", "screen2.png", "screen3.png", "howto.png"];
+    for (filename in assets)
+    {
+      var bitmapData:BitmapData = Assets.getBitmapData("assets/"+filename);
+      var screen = new Bitmap(bitmapData);
+      screen.scaleX = screen.scaleY = SCALE;
+      addChild(screen);
+      screens.push(screen);
+      screen.visible = false;
+    }
+
+    screens[0].visible = true;
 
     var stage = Lib.current.stage;
     stage.quality = StageQuality.LOW;
@@ -74,6 +90,19 @@ class Main extends Sprite
   private function onMouseUp(e:MouseEvent):Void
   {
     game.onMouseUp(mouseX, mouseY);
+
+    frame++;
+
+    for (screen in screens)
+      screen.visible = false;
+
+    if (frame < screens.length)
+      screens[frame].visible = true;
+    else if (frame == screens.length)
+    {
+      game.init();
+      addChild(game);
+    }
   }
 
   private function onEnterFrame(e:Event):Void
