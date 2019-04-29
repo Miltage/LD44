@@ -20,9 +20,12 @@ class Player extends Entity implements Combatant
   public static inline var SPEED:Float = 250;
   public static inline var SPRITE_WIDTH:Int = 50;
   public static inline var SPRITE_HEIGHT:Int = 50;
+  public static inline var MAX_HP:Int = 10;
+  public static inline var HEAL_RATE:Float = 0.01;
 
   private var animation:AnimatedSprite;
   private var weapon:WeaponType;
+  private var hp:Float;
 
   public function new()
   {
@@ -57,8 +60,14 @@ class Player extends Entity implements Combatant
     }
 
     weapon = REVOLVER;
+    hp = 10;
 
     animation.showBehavior("8");
+  }
+
+  public function getHP():Int
+  {
+    return Math.round(hp);
   }
 
   public function getWeapon():WeaponType
@@ -100,6 +109,9 @@ class Player extends Entity implements Combatant
     animation.showBehavior("" + frame);
 
     animation.update(delta);
+
+    if (hp < MAX_HP) 
+      hp += HEAL_RATE;
   }
 
   override public function collidesWith(entity:Entity):Bool
@@ -110,5 +122,11 @@ class Player extends Entity implements Combatant
   override public function takeDamage(amount:Int, fx:Float, fy:Float):Void
   {
     Main.getGameInstance().flash();
+    hp -= amount;
+  }
+
+  public function isDead():Bool
+  {
+    return hp <= 0;
   }
 }

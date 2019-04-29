@@ -29,6 +29,7 @@ class Game extends Sprite
 
   private var container:Sprite;
   private var flashSprite:Sprite;
+  private var deathSprite:Sprite;
   private var debug:Sprite;
   private var tooltip:Tooltip;
   private var ui:UI;
@@ -76,6 +77,12 @@ class Game extends Sprite
 
     var sw = Lib.current.stage.stageWidth;
     var sh = Lib.current.stage.stageHeight;
+
+    deathSprite = new Sprite();
+    deathSprite.graphics.beginFill(0xFF0000, 0.4);
+    deathSprite.graphics.drawRect(0, 0, sw, sh);
+    deathSprite.visible = false;
+    addChild(deathSprite);
 
     flashSprite = new Sprite();
     flashSprite.graphics.beginFill(0xFFFFFF, 0.8);
@@ -132,7 +139,7 @@ class Game extends Sprite
       twoHands.setOwner(player);
     }
 
-    lastSpawn = SPAWN_DELAY;
+    lastSpawn = Math.round(SPAWN_DELAY / 2);
     lastClick = 0;
   }
 
@@ -141,6 +148,8 @@ class Game extends Sprite
     var xx = mx - container.x;
     var yy = my - container.y;
     lastClick = Lib.getTimer();
+
+    if (player.isDead()) return;
 
     if (player.getWeapon() != NONE)
     {
@@ -234,6 +243,14 @@ class Game extends Sprite
     var delta = time - lastTime;
     lastTime = time;
 
+    flashSprite.visible = false;
+
+    if (player.isDead())
+    {
+      deathSprite.visible = true;
+      return;
+    }
+
     gameTime -= delta;
 
     if (time - lastSpawn > SPAWN_DELAY)
@@ -310,7 +327,6 @@ class Game extends Sprite
 
     tooltip.x = mouseX;
     tooltip.y = mouseY;
-    flashSprite.visible = false;
 
     for (entity in entities)
       entity.update(delta);
@@ -374,6 +390,7 @@ class Game extends Sprite
     ui.setTime(Math.floor(gameTime/1000));
     ui.setAmmo(twoHands.getAmmo());
     ui.setAmmoVisible(player.getWeapon() != NONE);
+    ui.setHealthPercent(player.getHP() / Player.MAX_HP * 100);
 
     if (player.getWeapon() != NONE && twoHands.getAmmo() <= 0 && time - lastClick < 1000)
     {

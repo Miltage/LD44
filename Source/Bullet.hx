@@ -56,7 +56,7 @@ class Bullet extends Sprite
       var dist = Math.sqrt(dy*dx + dy*dy);
       var radius = Reflect.field(Type.getClass(entity), "RADIUS");
 
-      if (dist < radius)
+      if (dist < radius && !flagged)
       {
         entity.takeDamage(1, velocity.x, velocity.y);
         flagged = true;
