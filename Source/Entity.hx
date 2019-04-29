@@ -26,21 +26,23 @@ class Entity extends Sprite implements Collidable
   private var target:Point;
   private var path:Array<Point>;
   private var faceMoving:Bool;
+  private var container:Sprite;
 
   public function new()
   {
     super();
 
-    #if debug
     var radius = Reflect.field(Type.getClass(this), "RADIUS");
-    graphics.beginFill(0xff0000, 1);
+    graphics.beginFill(0x000000, 0.7);
     graphics.drawEllipse(-radius/2, -radius/4, radius, radius/2);
-    #end
 
     velocity = new Point();
     targetVelocity = new Point();
     facing = new Point(0, 1);
     faceMoving = true;
+
+    container = new Sprite();
+    addChild(container);
   }
 
   public function update(delta:Int):Void

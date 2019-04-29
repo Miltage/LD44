@@ -243,6 +243,9 @@ class Game extends Sprite
     var delta = time - lastTime;
     lastTime = time;
 
+    if (input.isKeyPressed('R'.code))
+      reset();
+
     flashSprite.visible = false;
 
     if (player.isDead())

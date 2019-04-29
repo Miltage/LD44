@@ -16,6 +16,7 @@ class Debris extends Sprite
   public static inline var FRAME_RATE:Int = 1;
   public static inline var SPRITE_WIDTH:Int = 16;
   public static inline var SPRITE_HEIGHT:Int = 16;
+  public static inline var RADIUS:Int = 20;
 
   private var animation:AnimatedSprite;
   private var container:Sprite;
@@ -24,13 +25,14 @@ class Debris extends Sprite
   private var flagged:Bool;
   private var lifetime:Int;
   private var lifeSpan:Int;
+  private var radius:Int;
 
   public function new()
   {
     super();
 
     graphics.beginFill(0, 0.7);
-    var s = 15;
+    var s = 20;
     graphics.drawEllipse(-s/2, -s/4, s, s/2);
 
     container = new Sprite();
@@ -43,6 +45,7 @@ class Debris extends Sprite
 
     lifetime = 0;
     lifeSpan = 200;
+    radius = RADIUS;
 
     init();
   }
@@ -135,6 +138,8 @@ class Debris extends Sprite
 
     if (lifetime >= lifeSpan)
       flagged = true;
+
+    if (y - radius/2 < 300) y = 300 + radius/2;
   }
 
   public function flag():Void

@@ -64,7 +64,7 @@ class Mobster extends Entity implements Combatant
       animation.x = -SPRITE_WIDTH * Main.SCALE/2;
       animation.y = -SPRITE_HEIGHT * Main.SCALE*0.85;
       animation.scaleX = animation.scaleY = Main.SCALE;
-      addChild(animation);
+      container.addChild(animation);
     }
 
     faceMoving = false;
@@ -117,7 +117,7 @@ class Mobster extends Entity implements Combatant
       deathTimer += delta;
       targetVelocity.setTo(0, 0);
       velocity.setTo(0, 0);
-      rotation = facing.x > 0 ? -90 : 90;
+      container.rotation = facing.x > 0 ? -90 : 90;
       animation.showBehavior(facing.x > 0 ? "6" : "10");
 
       if (deathTimer > 100)

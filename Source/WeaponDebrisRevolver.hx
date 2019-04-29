@@ -63,6 +63,7 @@ class WeaponDebrisRevolver extends Debris implements Interactable
 
     lifeSpan = 400;
     ammo = 0;
+    radius = 50;
   }
 
   public function handleCursor(mx:Float, my:Float, tooltip:Tooltip):Void

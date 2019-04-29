@@ -14,7 +14,7 @@ import spritesheet.importers.BitmapImporter;
 class TwoHands extends Entity
 {
   public static inline var FRAME_RATE:Int = 12;
-  public static inline var RADIUS:Int = 8;
+  public static inline var RADIUS:Int = 15;
   public static inline var SPEED:Int = 400;
   public static inline var SPRITE_WIDTH:Int = 32;
   public static inline var SPRITE_HEIGHT:Int = 32;
