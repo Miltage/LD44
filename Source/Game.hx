@@ -31,9 +31,11 @@ class Game extends Sprite
   private var flashSprite:Sprite;
   private var debug:Sprite;
   private var tooltip:Tooltip;
+  private var ui:UI;
 
   private var lastTime:Int;
   private var lastSpawn:Int;
+  private var gameTime:Int;
 
   public function new(input:InputController)
   {
@@ -54,6 +56,8 @@ class Game extends Sprite
   {
     worldBBs = new Array<BB>();
 
+    gameTime = 120 * 1000;
+
     entities = new Array<Entity>();
     objects = new Array<Interactable>();
     bullets = new Array<Bullet>();
@@ -65,6 +69,9 @@ class Game extends Sprite
 
     tooltip = new Tooltip();
     addChild(tooltip);
+
+    ui = new UI();
+    addChild(ui);
 
     var sw = Lib.current.stage.stageWidth;
     var sh = Lib.current.stage.stageHeight;
@@ -224,6 +231,8 @@ class Game extends Sprite
     var delta = time - lastTime;
     lastTime = time;
 
+    gameTime -= delta;
+
     if (time - lastSpawn > SPAWN_DELAY)
     {
       spawnMobster();
@@ -358,6 +367,10 @@ class Game extends Sprite
         mobsters.remove(mobster);
       }
     }
+
+    ui.setTime(Math.floor(gameTime/1000));
+    ui.setAmmo(twoHands.getAmmo());
+    ui.setAmmoVisible(player.getWeapon() != NONE);
   }
 
   public function getBBs(bounds:BB):Array<BB>
