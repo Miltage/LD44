@@ -30,7 +30,7 @@ class Main extends Sprite
     var sh = Lib.current.stage.stageHeight;
 
     soundManager = new SoundManager(0.5);
-    soundManager.loop("assets/mafia.ogg");
+    //soundManager.loop("assets/mafia.ogg");
 
     game = new Game(input);
     game.graphics.beginFill(BG_COLOR, 1);

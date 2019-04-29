@@ -33,6 +33,7 @@ class Game extends Sprite
   private var debug:Sprite;
   private var tooltip:Tooltip;
   private var ui:UI;
+  private var wallBMD:BitmapData;
 
   private var lastTime:Int;
   private var lastClick:Int;
@@ -99,6 +100,13 @@ class Game extends Sprite
       container.addChild(plot);
     }
 
+    {
+      wallBMD = new BitmapData(Math.ceil(sw/Main.SCALE), Math.ceil(sh/Main.SCALE), true, 0);
+      var b = new Bitmap(wallBMD);
+      container.addChild(b);
+      b.scaleX = b.scaleY = Main.SCALE;
+    }
+
     #if debug
     {
       debug = new Sprite();
@@ -145,6 +153,14 @@ class Game extends Sprite
     lastClick = 0;
     lastFire = 0;
     mousePressed = false;
+  }
+
+  public function addBulletHole(x:Float, y:Float):Void
+  {
+    for (i in 0...4)
+      for (j in 0...4)
+          if (i > 0 && i < 3 || j > 0 && j < 3)
+            wallBMD.setPixel32(Std.int(x/2) + i, Std.int(y/2) + j, ((i == 1 || i == 2) && (j == 1 || j == 2) ? 0xFF111111 : 0xFFAAAAAA));
   }
 
   public function onMouseUp(mx:Float, my:Float):Void
@@ -398,13 +414,13 @@ class Game extends Sprite
     {
       bullet.update(delta);
 
+      bullet.doHitDetection(entities);
+
       if (bullet.flaggedForRemoval() || bullet.x > sw || bullet.x < 0 || bullet.y > sh || bullet.y < 0)
       {
         bullets.remove(bullet);
         container.removeChild(bullet);
       }
-
-      bullet.doHitDetection(entities);
     }
 
     for (mobster in mobsters)

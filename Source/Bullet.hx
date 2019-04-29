@@ -44,6 +44,13 @@ class Bullet extends Sprite
 
   public function doHitDetection(entities:Array<Entity>):Void
   {
+    if (y + velocity.y < 290)
+    {
+      Main.getGameInstance().addBulletHole(x + velocity.x, y + velocity.y);
+      flagged = true;
+      return;
+    }
+
     for (entity in entities)
     {
       if (Std.is(entity, Hand) || Std.is(entity, TwoHands)) continue;
