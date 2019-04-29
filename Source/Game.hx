@@ -25,6 +25,7 @@ class Game extends Sprite
   private var bullets:Array<Bullet>;
   private var worldBBs:Array<BB>;
   private var mobsters:Array<Mobster>;
+  private var debris:Array<Debris>;
 
   private var container:Sprite;
   private var flashSprite:Sprite;
@@ -56,6 +57,7 @@ class Game extends Sprite
     entities = new Array<Entity>();
     objects = new Array<Interactable>();
     bullets = new Array<Bullet>();
+    debris = new Array<Debris>();
     mobsters = new Array<Mobster>();
 
     container = new Sprite();
@@ -123,6 +125,7 @@ class Game extends Sprite
     }
 
     lastSpawn = SPAWN_DELAY;
+    addDebris(500, 500, WeaponDebrisRevolver);
   }
 
   public function onClick(mx:Float, my:Float):Void
@@ -143,6 +146,16 @@ class Game extends Sprite
     var bullet = new Bullet(origin, barrel.x, barrel.y, dir.x, dir.y);
     container.addChild(bullet);
     bullets.push(bullet);
+  }
+
+  public function addDebris(x:Float, y:Float, c:Class<Dynamic>):Void
+  {
+    if (c == null) return;
+    var d = cast(Type.createInstance(c, []), Debris);
+    d.x = x;
+    d.y = y;
+    container.addChild(cast d);
+    debris.push(cast d);
   }
 
   public function spawnMobster():Void
@@ -171,6 +184,21 @@ class Game extends Sprite
     entities.push(hands);
 
     mobster.setHands(hands);
+
+    mobster.onDeath = function()
+    {
+      entities.remove(hands);
+      container.removeChild(hands);
+
+      addDebris(mobster.x, mobster.y, Debris);
+      addDebris(mobster.x, mobster.y, Debris);
+      addDebris(mobster.x, mobster.y, switch (mobster.getWeapon())
+        {
+          case TOMMY: WeaponDebrisTommy;
+          case REVOLVER: WeaponDebrisRevolver;
+          default: null;
+        });
+    }
   }
 
   public function update():Void
@@ -255,6 +283,16 @@ class Game extends Sprite
     for (entity in entities)
       entity.update(delta);
 
+    for (deb in debris)
+    {
+      deb.update(delta);
+      if(deb.flaggedForRemoval())
+      {
+        container.removeChild(deb);
+        debris.remove(deb);
+      }
+    }
+
     for (object in objects)
       object.handleCursor(mouseX, mouseY, tooltip);
 
@@ -273,12 +311,6 @@ class Game extends Sprite
 
     for (mobster in mobsters)
     {
-      if (mobster.isDead())
-      {
-        entities.remove(mobster.getHands());
-        container.removeChild(mobster.getHands());
-      }
-
       if (mobster.flaggedForRemoval())
       {
         container.removeChild(mobster);

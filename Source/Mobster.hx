@@ -213,7 +213,13 @@ class Mobster extends Entity implements Combatant
 
   override public function takeDamage(amount:Int, fx:Float, fy:Float):Void
   {
+    if (isDead())
+      return;
+
     hp -= amount;
+
+    if (hp <= 0)
+      onDeath();
 
     velocity.x = fx * 2;
     velocity.y = fy * 2;
@@ -222,6 +228,11 @@ class Mobster extends Entity implements Combatant
   public function isDead():Bool
   {
     return hp <= 0;
+  }
+
+  public dynamic function onDeath():Void
+  {
+
   }
 
   public function flaggedForRemoval():Bool
