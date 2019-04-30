@@ -116,7 +116,7 @@ class Player extends Entity implements Combatant
 
   override public function collidesWith(entity:Entity):Bool
   {
-    return Std.is(entity, Mobster);
+    return Std.is(entity, Mobster) && !cast(entity, Mobster).isDead();
   }
 
   override public function takeDamage(amount:Int, fx:Float, fy:Float):Void
