@@ -17,6 +17,7 @@ class Main extends Sprite
 
   private static var game:Game;
   private static var soundManager:SoundManager;
+  private static var mute:Bool;
 
   private var input:InputController;
   private var frame:Int;
@@ -36,12 +37,13 @@ class Main extends Sprite
     graphics.beginFill(BG_COLOR, 1);
     graphics.drawRect(0, 0, sw, sh);
 
-    soundManager = new SoundManager(0.5);
-    //soundManager.loop("assets/mafia.ogg");
+    soundManager = new SoundManager(0.4);
+    soundManager.loop("assets/mafia.ogg");
 
     game = new Game(input);
 
     frame = 0;
+    mute = false;
     screens = new Array<Bitmap>();
     dust = new Array<DustParticle>();
 
@@ -88,6 +90,8 @@ class Main extends Sprite
     {
       case 'R'.code:
         game.reset();
+      case 'M'.code:
+        muteGame();
       default:
         input.onKeyDown(keyCode);
     }
@@ -128,11 +132,18 @@ class Main extends Sprite
     {
       game.init();
       game.visible = true;
+      soundManager.loop("assets/mafia.ogg");
     }
     else if (frame < screens.length && !game.isPlaying())
     {
       screens[frame].visible = true;
       game.unset();
+
+      if (frame == 4)
+        soundManager.play("assets/dirge.ogg");
+      else
+        soundManager.loop("assets/mafia.ogg");
+
     }
   }
 
@@ -178,4 +189,11 @@ class Main extends Sprite
   {
     return game;
   }  
+
+  public static function muteGame()
+  {
+    mute = !mute;
+    for (m in SoundManager.managers)
+      m.transform(mute ? 0 : 1);
+  }
 }

@@ -233,8 +233,6 @@ class Game extends Sprite
     lastClick = time;
 
     mousePressed = false;
-
-    player.takeDamage(2, 0, 0);
   }
 
   public function onMouseDown(mx:Float, my:Float):Void
