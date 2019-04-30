@@ -21,7 +21,7 @@ class Player extends Entity implements Combatant
   public static inline var SPRITE_WIDTH:Int = 50;
   public static inline var SPRITE_HEIGHT:Int = 50;
   public static inline var MAX_HP:Int = 10;
-  public static inline var HEAL_RATE:Float = 0.01;
+  public static inline var HEAL_RATE:Float = 0.015;
 
   private var animation:AnimatedSprite;
   private var weapon:WeaponType;
