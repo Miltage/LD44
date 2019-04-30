@@ -47,6 +47,7 @@ class Game extends Sprite
   private var initialized:Bool;
   private var playing:Bool;
   private var win:Bool;
+  private var wait:Int;
 
   public function new(input:InputController)
   {
@@ -94,6 +95,7 @@ class Game extends Sprite
     initialized = true;
     win = false;
     playing = true;
+    wait = 30;
     worldBBs = new Array<BB>();
 
     lastTime = Lib.getTimer();
@@ -363,18 +365,21 @@ class Game extends Sprite
     if (player.isDead())
     {
       deathSprite.visible = true;
-      playing = false;
+      wait--;
+      if (wait <= 0)
+        playing = false;
       return;
     }
 
     gameTime -= delta;
 
-    win = gameTime <= 0;
-
-    if (win)
+    if (gameTime <= 0)
     {
+      wait--;      
       winSprite.visible = true;
-      playing = false;
+      win = wait <= 0;
+      if (win)
+        playing = false;
       return;
     }
 

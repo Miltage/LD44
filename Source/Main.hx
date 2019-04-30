@@ -24,6 +24,7 @@ class Main extends Sprite
   private var screens:Array<Bitmap>;
   private var dust:Array<DustParticle>;
   private var line:Sprite;
+  private var wait:Int;
   
   public function new()
   {
@@ -43,6 +44,7 @@ class Main extends Sprite
     game = new Game(input);
 
     frame = 0;
+    wait = 5;
     mute = false;
     screens = new Array<Bitmap>();
     dust = new Array<DustParticle>();
@@ -116,8 +118,11 @@ class Main extends Sprite
     for (screen in screens)
       screen.visible = false;
 
-    if (!game.isInitialized() && !game.isPlaying())
+    if (!game.isInitialized() && !game.isPlaying() && wait <= 0)
+    {
       frame++;
+      wait = 20;
+    }
 
     if (frame >= screens.length + 1)
       frame = 0;
@@ -143,7 +148,6 @@ class Main extends Sprite
         soundManager.play("assets/dirge.ogg");
       else
         soundManager.loop("assets/mafia.ogg");
-
     }
   }
 
@@ -151,6 +155,9 @@ class Main extends Sprite
   {
     game.update();
     input.update();
+
+    if (!game.isPlaying() && wait > 0)
+      wait--;
 
     if (game.isInitialized() && game.isPlaying())
       return;

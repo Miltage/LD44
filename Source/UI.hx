@@ -66,7 +66,7 @@ class UI extends Sprite
     hp.scaleX = hp.scaleY = Main.SCALE;
     addChild(hp);
     hp.y = 12;
-    hp.x = sw/2 - 96/2;
+    hp.x = sw/2 - 96;
 
     setHealthPercent(40);
   }
