@@ -60,6 +60,8 @@ class Game extends Sprite
 
   public function reset():Void
   {
+    if (!playing) return;
+    
     unset();
     init();
   }
