@@ -61,7 +61,7 @@ class Bullet extends Sprite
       var dx = entity.x - x;
       var dy = entity.y - y;
       var dist = Math.sqrt(dy*dx + dy*dy);
-      var radius = Reflect.field(Type.getClass(entity), "RADIUS");
+      var radius = entity.getRadius();
 
       if (dist < radius && !flagged)
       {

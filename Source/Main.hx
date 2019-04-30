@@ -76,6 +76,11 @@ class Main extends Sprite
 
     addChild(game);
 
+    #if debug
+    game.init();
+    game.visible = true;
+    #end
+
     var stage = Lib.current.stage;
     stage.quality = StageQuality.LOW;
     stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);

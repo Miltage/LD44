@@ -65,6 +65,12 @@ class Player extends Entity implements Combatant
     animation.showBehavior("8");
   }
 
+  override private function init()
+  {
+    radius = 30;
+    speed = 250;
+  }
+
   public function getHP():Int
   {
     return Math.round(hp);

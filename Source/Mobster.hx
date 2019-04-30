@@ -98,6 +98,12 @@ class Mobster extends Entity implements Combatant
     decideFightDistance(Main.getGameInstance().getPlayer());
   }
 
+  override private function init()
+  {
+    radius = 30;
+    speed = 200;
+  }
+
   public function getWeapon():WeaponType
   {
     return weapon;

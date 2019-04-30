@@ -77,6 +77,12 @@ class Hand extends Entity
     animation.showBehavior("8");
   }
 
+  override private function init()
+  {
+    radius = 12;
+    speed = 400;
+  }
+
   override public function update(delta:Int):Void
   {
     super.update(delta);

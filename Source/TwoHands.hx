@@ -103,6 +103,12 @@ class TwoHands extends Entity
     addChild(muzzleFlash);
   }
 
+  override private function init()
+  {
+    radius = 15;
+    speed = 400;
+  }
+
   public function getOwner():Combatant
   {
     return owner;

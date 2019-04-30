@@ -27,12 +27,15 @@ class Entity extends Sprite implements Collidable
   private var path:Array<Point>;
   private var faceMoving:Bool;
   private var container:Sprite;
+  private var radius:Int;
+  private var speed:Int;
 
   public function new()
   {
     super();
 
-    var radius = Reflect.field(Type.getClass(this), "RADIUS");
+    init();
+
     graphics.beginFill(0x000000, 0.7);
     graphics.drawEllipse(-radius/2, -radius/4, radius, radius/2);
 
@@ -45,11 +48,14 @@ class Entity extends Sprite implements Collidable
     addChild(container);
   }
 
+  private function init()
+  {
+    radius = 30;
+    speed = 200;
+  }
+
   public function update(delta:Int):Void
   {
-    var radius = Reflect.field(Type.getClass(this), "RADIUS");
-    var speed = Reflect.field(Type.getClass(this), "SPEED");
-
     if (target != null)
     {
       var dx = target.x - x;
@@ -142,7 +148,6 @@ class Entity extends Sprite implements Collidable
 
   public function moveToward(entity:Entity):Void
   {
-    var speed = Reflect.field(Type.getClass(this), "SPEED");
     var dx = entity.x - x;
     var dy = entity.y - y;
     var dist = Math.sqrt(dx*dx + dy*dy);
@@ -152,7 +157,6 @@ class Entity extends Sprite implements Collidable
 
   public function moveAwayFrom(entity:Entity):Void
   {
-    var speed = Reflect.field(Type.getClass(this), "SPEED");
     var dx = entity.x - x;
     var dy = entity.y - y;
     var dist = Math.sqrt(dx*dx + dy*dy);
@@ -181,8 +185,8 @@ class Entity extends Sprite implements Collidable
     var a = new Point(this.x, this.y);
     var b = new Point(collidable.x, collidable.y);
     var dist = Point.distance(a, b);
-    var radius1 = Reflect.field(Type.getClass(collidable), "RADIUS");
-    var radius2 = Reflect.field(Type.getClass(this), "RADIUS");
+    var radius1 = collidable.getRadius();
+    var radius2 = radius;
     return dist < (radius1 + radius2);
   }
 
@@ -196,8 +200,8 @@ class Entity extends Sprite implements Collidable
     var a = new Point(this.x, this.y);
     var b = new Point(entity.x, entity.y);
     var dist = Point.distance(a, b);
-    var radius1 = Reflect.field(Type.getClass(entity), "RADIUS");
-    var radius2 = Reflect.field(Type.getClass(this), "RADIUS");
+    var radius1 = entity.getRadius();
+    var radius2 = radius;
     var overlap = dist - (radius1 + radius2);
     var dx = b.x - a.x;
     var dy = b.y - a.y;
@@ -249,8 +253,16 @@ class Entity extends Sprite implements Collidable
 
   public function isOnScreen():Bool
   {
-    var radius = Reflect.field(Type.getClass(this), "RADIUS");
-
     return x + radius > 0 && y + radius > 0 && x - radius < Lib.current.stage.stageWidth && y - radius < Lib.current.stage.stageHeight;
+  }
+
+  public function getSpeed():Int
+  {
+    return speed;
+  }
+
+  public function getRadius():Int
+  {
+    return radius;
   }
 }
