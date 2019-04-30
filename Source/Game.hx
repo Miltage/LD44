@@ -171,7 +171,7 @@ class Game extends Sprite
       player.y = 400;
       container.addChild(player);
       entities.push(player);
-      player.setWeapon(SHOTGUN);
+      player.setWeapon(REVOLVER);
     }
 
     {
@@ -319,6 +319,7 @@ class Game extends Sprite
 
       addDebris(mobster.x, mobster.y, Debris);
       addDebris(mobster.x, mobster.y, Debris);
+      addDebris(mobster.x, mobster.y, HatDebris);
       addDebris(mobster.x, mobster.y, switch (mobster.getWeapon())
         {
           case TOMMY: WeaponDebrisTommy;

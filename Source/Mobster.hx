@@ -41,7 +41,7 @@ class Mobster extends Entity implements Combatant
 
     {
       var bitmapData:BitmapData = Assets.getBitmapData("assets/coin2.png");
-      var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 16, 1, SPRITE_WIDTH, SPRITE_HEIGHT);
+      var spritesheet:Spritesheet = BitmapImporter.create(bitmapData, 16, 2, SPRITE_WIDTH, SPRITE_HEIGHT);
 
       spritesheet.addBehavior(new BehaviorData("0", [0], true, FRAME_RATE));
       spritesheet.addBehavior(new BehaviorData("1", [1], true, FRAME_RATE));
@@ -59,6 +59,9 @@ class Mobster extends Entity implements Combatant
       spritesheet.addBehavior(new BehaviorData("13", [13], true, FRAME_RATE));
       spritesheet.addBehavior(new BehaviorData("14", [14], true, FRAME_RATE));
       spritesheet.addBehavior(new BehaviorData("15", [15], true, FRAME_RATE));
+
+      spritesheet.addBehavior(new BehaviorData("dead1", [22], true, FRAME_RATE));
+      spritesheet.addBehavior(new BehaviorData("dead2", [26], true, FRAME_RATE));
 
       animation = new AnimatedSprite(spritesheet, true);
       animation.x = -SPRITE_WIDTH * Main.SCALE/2;
@@ -129,7 +132,7 @@ class Mobster extends Entity implements Combatant
       targetVelocity.setTo(0, 0);
       velocity.setTo(0, 0);
       container.rotation = facing.x > 0 ? -90 : 90;
-      animation.showBehavior(facing.x > 0 ? "6" : "10");
+      animation.showBehavior(facing.x > 0 ? "dead1" : "dead2");
 
       if (deathTimer > 100)
       {
