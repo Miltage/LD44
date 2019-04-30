@@ -83,7 +83,7 @@ class WeaponDebrisShotgun extends Debris implements Interactable
 
   public function getWeaponType():WeaponType
   {
-    return TOMMY;
+    return SHOTGUN;
   }
 
   public function getAmmo():Int
